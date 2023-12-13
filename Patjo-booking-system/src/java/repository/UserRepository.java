@@ -2,6 +2,7 @@ package repository;
 
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -20,8 +21,8 @@ public class UserRepository {
     }
 
     public void saveUser(User user) {
-        String sql = "INSERT INTO APP.USERS (USERNAME, PASSWORD) VALUES (?, ?)";
-        jdbcTemplate.update(sql, user.getUsername(), user.getPassword());
+        String sql = "INSERT INTO APP.USERS (USERNAME, PASSWORD, ADMIN) VALUES (?, ?)";
+        jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getIsAdmin());
     }
 
     public Integer fetchUserID(User user) {
@@ -29,13 +30,21 @@ public class UserRepository {
         return jdbcTemplate.queryForObject(query, Integer.class, user.getUsername(), user.getPassword());
     }
 
-    public Integer checkIfUserExistInDB(User user) {
-        String query = "SELECT ID FROM APP.USERS WHERE USERNAME = ?";
-        try {
-            Integer userId = jdbcTemplate.queryForObject(query, Integer.class, user.getUsername());
-            return userId;
-        } catch (Exception e) {
-            return -1; 
+    public User findByUsername(String username) {
+        String sql = "SELECT * FROM BOOKING.users WHERE usersname = ?";
+        
+        try{
+        return jdbcTemplate.queryForObject(sql, new Object[]{username}, (rs, rowNum) -> {
+            User user = new User();
+            user.setUserId(rs.getInt("users_id"));
+            user.setUsername(rs.getString("usersname"));
+            user.setPassword(rs.getString("password"));
+            user.setIsAdmin(rs.getInt("admin"));
+
+            return user;
+        });
+        } catch (EmptyResultDataAccessException e){
+            return null;
         }
     }
     

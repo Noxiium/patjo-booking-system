@@ -20,22 +20,19 @@ public class UserService {
     public void saveUser(User user) {
         userRepository.saveUser(user);
         Integer userId = userRepository.fetchUserID(user);
-        user.setId(userId);
+        user.setUserId(userId);
 
-        System.out.println(user.getId());
 
     }
-
-    public void handleUserLogin(User user) {
-
-        Integer userId = userRepository.checkIfUserExistInDB(user);
-        //TODO method, check if password match
-        
-        if (userId == -1) {
-        //TODO send view, ERROR
-        } else {
-            user.setId(userId);
-        }
+    
+    public User handleUserLogin(String username, String password) {
+    User user = userRepository.findByUsername(username);
+    
+    System.out.println(user);
+    if (user != null && user.getPassword().equals(password)) {
+        return user; // Return user ID to the controller
+    }
+    return null; // Return null if user doesn't exist or password doesn't match
     }
 
 }

@@ -10,22 +10,22 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+    private Integer userId;
     private String username;
     private String password;
+    private int isAdmin;
 
    
     public User() {
       
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getUsername() {
@@ -44,6 +44,20 @@ public class User {
         this.password = password;
     }
     
+    public int getIsAdmin() {
+        return this.isAdmin;
+    }
+
+    public void setIsAdmin(int isAdmin) {
+        this.isAdmin = isAdmin;
+    }
     
-    
+    @Override
+    public String toString(){
+        return this.userId + "\n" +
+                this.username + "\n" +
+                this.password + "\n" +
+                this.isAdmin + "\n" +
+        "\n---------------------------------------\n";
+    }
 }

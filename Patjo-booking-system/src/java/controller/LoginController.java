@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import service.UserService;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/")
@@ -30,13 +31,23 @@ public class LoginController {
     }
 
     @PostMapping
-    public String handleUserLogin(@ModelAttribute("user") User user, Model model, HttpSession session) {
+    public String handleUserLogin(@RequestParam String username, 
+                                  @RequestParam String password, HttpSession session) {
     
-        userService.handleUserLogin(user);
-      
-        session.setAttribute("username", user.getUsername());
-        session.setAttribute("userId", user.getId());
-        return "mainView";
+        User user = userService.handleUserLogin(username, password);
+        if (user == null){
+            return "";
+        }
+        session.setAttribute("username", username);
+        session.setAttribute("userId", user.getUserId());
+        
+        
+        if (user.getIsAdmin() == 0){
+            return "mainPageView";
+        }
+        else {
+            return "adminMainPageView";
+        }
     }
 
 }
