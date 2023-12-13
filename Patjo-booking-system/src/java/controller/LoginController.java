@@ -34,9 +34,10 @@ public class LoginController {
     public String handleUserLogin(@RequestParam String username, 
                                   @RequestParam String password, HttpSession session) {
     
-        User user = userService.handleUserLogin(username, password);
+        
+        User user = userService.handleUserLogin(username, password); // <-- Kanske inte returnera hela user objektet i controller?? IDK
         if (user == null){
-            return "loginView";
+            return "loginView"; // <-- Visa att användarnamn/lösenord var fel??
         }
         session.setAttribute("username", username);
         session.setAttribute("userId", user.getUserId());
