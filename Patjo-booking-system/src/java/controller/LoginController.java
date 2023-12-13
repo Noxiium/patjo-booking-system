@@ -31,7 +31,8 @@ public class LoginController {
     }
 
     @PostMapping
-    public String handleUserLogin(@RequestParam String username, 
+    public String handleUserLogin(Model model,
+                                  @RequestParam String username, 
                                   @RequestParam String password, HttpSession session) {
     
         
@@ -39,8 +40,8 @@ public class LoginController {
         if (user == null){
             return "loginView"; // <-- Visa att användarnamn/lösenord var fel??
         }
-        session.setAttribute("username", username);
-        session.setAttribute("userId", user.getUserId());
+        model.addAttribute("username", username);
+        model.addAttribute("userId", user.getUserId());
         
         
         if (user.getIsAdmin() == 0){

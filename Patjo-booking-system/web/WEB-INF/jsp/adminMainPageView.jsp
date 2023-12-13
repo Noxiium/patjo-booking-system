@@ -13,5 +13,8 @@
     </head>
     <body>
         <h1>Admin page!</h1>
+        
+        <p>Welcome, ${username}!</p>
+        <p>Your User ID is: ${userId}</p>
     </body>
 </html>
