@@ -29,9 +29,10 @@ public class UserService {
     public void handleUserLogin(User user) {
 
         Integer userId = userRepository.checkIfUserExistInDB(user);
-
+        //TODO method, check if password match
+        
         if (userId == -1) {
-            saveUser(user);
+        //TODO send view, ERROR
         } else {
             user.setId(userId);
         }
