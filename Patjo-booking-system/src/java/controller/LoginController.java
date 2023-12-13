@@ -36,7 +36,7 @@ public class LoginController {
     
         User user = userService.handleUserLogin(username, password);
         if (user == null){
-            return "";
+            return "loginView";
         }
         session.setAttribute("username", username);
         session.setAttribute("userId", user.getUserId());
