@@ -1,0 +1,14 @@
+**/pom.xml
+**/target/
+**/.DS_Store
+**/dist/
+**/build/
+**/nbproject
+**/test/
+**/dist/
+**/build/
+**/nbproject
+**/test/
+**/build.xml
+
+password.txt
