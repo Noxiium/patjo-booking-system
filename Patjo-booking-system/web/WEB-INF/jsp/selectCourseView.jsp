@@ -8,7 +8,7 @@
     <title>Ultimate PATJO Quiz Game</title>
     <script>
         function toMainView() {
-           window.location.href = 'mainPage';
+           window.location.href = '/Patjo-booking-system/mainPage';
         }
         
         function validateForm() {
@@ -26,7 +26,7 @@
 <body>
     <h1>Select a course</h1>
 
-    <form action="booking/timeslots" method="get" onsubmit="return validateForm()">
+    <form action="showtimeslots" method="get" onsubmit="return validateForm()">
         <c:forEach var="course" items="${courseList}">
             <label>
                 <input type="radio" name="selectedCourse" value="${course.courseId}">
