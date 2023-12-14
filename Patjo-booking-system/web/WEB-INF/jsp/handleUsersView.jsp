@@ -25,13 +25,13 @@
         <h1>Admin Handle User Page</h1>
         <hr style="margin-top: 20px; margin-bottom: 20px;">
 
-        <form id="addUser123" method="post" action="addUser" autocomplete="off" style="margin-top: 20px;">
+        <form id="addUser" method="post" action="addUser" autocomplete="off" style="margin-top: 20px;" onsubmit="return validateAddUserForms()">
             <h2> Add User: </h2>
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username">
+            <input type="email" id="username" name="username">
             
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password">
+            <input type="text" id="password" name="password">
             
             <label for="isAdmin">Admin:</label>
             <input type="checkbox" id="isAdmin" name="isAdmin">
@@ -40,7 +40,7 @@
 
         <hr style="margin-top: 20px; margin-bottom: 20px;">
 
-        <form id="selectUsersForm" method="post" action="removeUsers">
+        <form id="selectUsersForm" method="post" action="removeUsers" onsubmit="return validateForm()">
             <h2> Select and remove users: </h2>
             <div class="table-container">
                 <div>
@@ -84,7 +84,7 @@
                     </table>
                 </div>
             </div>
-            <input type="submit" value="Delete selected users" style="margin-top: 10px;">
+            <input id="deleteButton" type="submit" value="Delete selected users" style="margin-top: 10px;">
         </form>
 
         <script>
@@ -107,6 +107,36 @@
                 hiddenInput.value = userIds.join(','); // Convert array to comma-separated string
                 document.getElementById('selectUsersForm').appendChild(hiddenInput);
             }
+            function validateForm() {
+            var radios = document.getElementsByName('userIds');
+            var checked = false;
+            for (var i = 0; i < radios.length; i++) {
+                if (radios[i].checked) {
+                    checked = true;
+                    break;
+                }
+            }
+            if (!checked) {
+                alert('You have not selected any users');
+                return false; // Prevent form submission if no subject is selected
+            }
+            return true; // Proceed with form submission
+        }
+        
+        function validateAddUserForms() {
+        const addUserForm = document.getElementById('addUser');
+        const username = addUserForm.querySelector('#username').value.trim();
+        const password = addUserForm.querySelector('#password').value.trim();
+
+        // Check if all fields in the "Add User" form are filled
+        if (username === '' || password === '') {
+            alert('Please fill in all fields');
+            return false; // Prevent form submission
+        }
+
+        // If the "Add User" form is validated, proceed to the next form
+        return true;
+    }
         </script>
     </body>
 </html>
