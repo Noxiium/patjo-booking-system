@@ -1,16 +1,14 @@
 package model;
 
 import java.io.Serializable;
-import javax.persistence.Column;
+
 
 public class CourseDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    //@Column(name = "COURSE_ID")
     private int courseId;
 
-    //@Column(name = "COURSE_NAME")
     private String courseName;
 
     public CourseDTO() {
