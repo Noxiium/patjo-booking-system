@@ -21,6 +21,7 @@
 
     <bean name="loginController" class="controller.LoginController" />
     <bean name="bookingController" class="controller.BookingController" />
+    <bean name="handleUserController" class="controller.HandleUserController" />
    <!-- <bean name="selectSubjectController" class="controller.SelectSubjectController" />
     <bean name="mainViewController" class="controller.MainViewController" />
     <bean name="gameHandlerController" class="controller.GameHandlerController" />-->
