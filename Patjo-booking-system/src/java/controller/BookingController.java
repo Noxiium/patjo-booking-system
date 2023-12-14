@@ -16,7 +16,6 @@ import service.BookingService;
  *
  */
 @Controller
-@RequestMapping("/booking")
 public class BookingController {
 
     private final BookingService bookingService;
@@ -34,19 +33,18 @@ public class BookingController {
      * @param model
      * @return selectCourseView
      */
-   @GetMapping
+     @RequestMapping("/booking/showcourses")
     public String showAvailableCourses(Model model) {
-
         List<CourseDTO> courseList = bookingService.fetchAvailableCourses();
         model.addAttribute("courseList", courseList);
 
         return "selectCourseView";
     }
 
-    /*@GetMapping("/timeslots")
+    @RequestMapping("/booking/showtimeslots")
     public String showTimeSlotLists(@RequestParam("selectedCourse") int selectedCourseId, Model model) {
         System.out.println("selected course id: " + selectedCourseId);
         
-        return "selectedCourseView"; 
-    }*/
+        return "timeSlotsView"; 
+    }
 }
