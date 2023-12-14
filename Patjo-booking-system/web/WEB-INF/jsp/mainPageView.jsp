@@ -18,8 +18,8 @@
         <p>Welcome, ${sessionScope.username}!</p>
         <p>Your User ID is: ${sessionScope.userId}</p>
         
-        <form action="booking" method="get">
-    <input type="submit" value="Show Courses" name="submit-button" />
+        <form action="booking/showcourses" method="get">
+    <input type="submit" value="Show Courses"/>
 </form>
     </body>
 </html>
