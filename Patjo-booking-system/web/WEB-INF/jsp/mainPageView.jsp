@@ -19,7 +19,7 @@
         <p>Your User ID is: ${sessionScope.userId}</p>
         
         <form action="booking" method="get">
-    <input type="submit" value="Show Time Slots" name="submit-button" />
+    <input type="submit" value="Show Courses" name="submit-button" />
 </form>
     </body>
 </html>
