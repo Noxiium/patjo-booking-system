@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Ultimate PATJO Quiz Game</title>
+    <title>Patjo Booking System</title>
     <script>
         function toMainView() {
            window.location.href = '/Patjo-booking-system/mainPage';
@@ -24,7 +24,7 @@
     </script>
 </head>
 <body>
-    <h1>Select a course</h1>
+    <h1>Select a course to show available time slots</h1>
 
     <form action="showtimeslots" method="get" onsubmit="return validateForm()">
         <c:forEach var="course" items="${courseList}">
