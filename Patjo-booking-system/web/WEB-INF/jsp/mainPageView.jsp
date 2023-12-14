@@ -15,7 +15,11 @@
     <body>
         <h1>Student page!</h1>
         
-        <p>Welcome, ${username}!</p>
-        <p>Your User ID is: ${userId}</p>
+        <p>Welcome, ${sessionScope.username}!</p>
+        <p>Your User ID is: ${sessionScope.userId}</p>
+        
+        <form action="booking" method="get">
+    <input type="submit" value="Show Time Slots" name="submit-button" />
+</form>
     </body>
 </html>

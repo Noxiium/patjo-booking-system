@@ -43,6 +43,8 @@ public class LoginController {
         model.addAttribute("username", username);
         model.addAttribute("userId", user.getUserId());
         
+        session.setAttribute("username", username);
+        session.setAttribute("userId", user.getUserId());
         
         if (user.getIsAdmin() == 0){
             return "mainPageView";

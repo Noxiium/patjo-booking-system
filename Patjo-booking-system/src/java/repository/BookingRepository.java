@@ -1,13 +1,23 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package repository;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
 /**
- *
- * @author patricialagerhult
+* BookingRepository class manages interactions with the database for booking-related transactions.
+ * 
  */
+
+@Repository
 public class BookingRepository {
+    
+     private final JdbcTemplate jdbcTemplate;
+     
+     @Autowired
+     public BookingRepository(JdbcTemplate jdbcTemplate){
+      this.jdbcTemplate = jdbcTemplate;
+     }
     
 }
