@@ -11,7 +11,7 @@
     <p>Welcome, ${username}!</p>
     <p>Your User ID is: ${userId}</p>
     
-    <form action="users" method="get">
+    <form action="users/showusers" method="get">
     <input type="submit" value="Handle Users" name="submit-button" />
 </form>
 </body>

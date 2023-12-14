@@ -1,5 +1,6 @@
 package repository;
 
+import java.util.List;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -15,18 +16,16 @@ public class UserRepository {
     public UserRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-
-    public void handleUserLogin() {
-
-    }
+    
+    
 
     public void saveUser(User user) {
-        String sql = "INSERT INTO APP.USERS (USERNAME, PASSWORD, ADMIN) VALUES (?, ?)";
+        String sql = "INSERT INTO BOOKING.USERS (USERSNAME, PASSWORD, ADMIN) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getIsAdmin());
     }
 
     public Integer fetchUserID(User user) {
-        String query = "SELECT ID FROM APP.USERS WHERE USERNAME = ? AND PASSWORD = ?";
+        String query = "SELECT ID FROM BOOKING.USERS WHERE USERSNAME = ? AND PASSWORD = ?";
         return jdbcTemplate.queryForObject(query, Integer.class, user.getUsername(), user.getPassword());
     }
 
@@ -41,6 +40,23 @@ public class UserRepository {
             user.setPassword(rs.getString("password"));
             user.setIsAdmin(rs.getInt("admin"));
 
+            return user;
+        });
+        } catch (EmptyResultDataAccessException e){
+            return null;
+        }
+    }
+    
+    public List<User> fetchAllUsersFromDB(){
+        String sql = "SELECT * FROM BOOKING.USERS";
+        
+        try{
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            User user = new User();
+            user.setUserId(rs.getInt("users_id"));
+            user.setUsername(rs.getString("usersname"));
+            user.setPassword(rs.getString("password"));
+            user.setIsAdmin(rs.getInt("admin"));
             return user;
         });
         } catch (EmptyResultDataAccessException e){

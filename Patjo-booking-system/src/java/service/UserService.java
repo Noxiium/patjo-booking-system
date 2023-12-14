@@ -18,19 +18,44 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    @Transactional
     public void saveUser(User user) {
         userRepository.saveUser(user);
-        Integer userId = userRepository.fetchUserID(user);
-        user.setUserId(userId);
     }
 
-    /**
-     * Retrieves a list of all users.
-     *
-     * @return A list of User objects representing all users.
-     */
+    public void addNewUser(String username, String password, Boolean isAdmin) {
+        int isAdminInt = 0;
+        if (isAdmin) {
+            isAdminInt = 1;
+        }
+        User newUser = new User(username, password, isAdminInt);
+        saveUser(newUser);
+    }
+
     public List<User> getAllUsers() {
+        return userRepository.fetchAllUsersFromDB();
+    }
+
+    public List<User> getAllAdminUsersFromExistingList(List<User> allUsers) {
+        List<User> adminUsers = new ArrayList<>();
+        for (User user : allUsers) {
+            if (user.getIsAdmin() == 1) {
+                adminUsers.add(user);
+            }
+        }
+        return adminUsers;
+    }
+
+    public List<User> getAllNonAdminUsersFromExistingList(List<User> allUsers) {
+        List<User> nonAdminUsers = new ArrayList<>();
+        for (User user : allUsers) {
+            if (user.getIsAdmin() == 0) {
+                nonAdminUsers.add(user);
+            }
+        }
+        return nonAdminUsers;
+    }
+
+    public List<User> tempGetAllUsers() {
 
         // TODO Actually fetch from DATABASE using userRepository
         List<User> list = new ArrayList<>();
@@ -50,7 +75,6 @@ public class UserService {
             System.out.print(user);
         }
         return list;
-
     }
 
     public User handleUserLogin(String username, String password) {
@@ -62,5 +86,4 @@ public class UserService {
         }
         return null; // Return null if user doesn't exist or password doesn't match
     }
-
 }
