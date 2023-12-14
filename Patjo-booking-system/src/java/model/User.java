@@ -15,9 +15,13 @@ public class User {
     private String password;
     private int isAdmin;
 
-   
-    public User() {
-      
+    public User(){
+        
+    }
+    public User(String username, String password, int isAdmin) {
+        this.username = username;
+        this.password = password;
+        this.isAdmin = isAdmin;
     }
 
     public Integer getUserId() {
