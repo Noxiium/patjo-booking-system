@@ -1,6 +1,7 @@
 package controller;
 
 import java.util.List;
+import model.BookingDTO;
 import model.CourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,10 +42,23 @@ public class BookingController {
         return "selectCourseView";
     }
 
+    /**
+     *
+     * Handles GET request for displaying available time slots for the selected course.
+     * Retrieves a booking list with time slots from the BookingService class, and adds it to the
+     * model for rendering in view.
+     * @param selectedCourseId The id of the selected course
+     * @param model
+     * @return timeSlotsView
+     */
     @RequestMapping("/booking/showtimeslots")
-    public String showTimeSlotLists(@RequestParam("selectedCourse") int selectedCourseId, Model model) {
+    public String showBookingListForCourse(@RequestParam("selectedCourse") int selectedCourseId, Model model) {
         System.out.println("selected course id: " + selectedCourseId);
-        
+        List<BookingDTO> bookingList = bookingService.fetchBookingListForCourse(selectedCourseId);
+       
+        model.addAttribute("bookingList", bookingList);
         return "timeSlotsView"; 
     }
+    
+
 }
