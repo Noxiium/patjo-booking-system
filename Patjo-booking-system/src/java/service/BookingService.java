@@ -2,6 +2,7 @@ package service;
 
 import java.util.ArrayList;
 import java.util.List;
+import model.CourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import repository.BookingRepository;
@@ -26,14 +27,14 @@ public class BookingService {
     * 
     * @return List of available courses
      */
-    public List<String> fetchAvailableCourses() {
-        //List<String> courseList = bookingRepository.fetchAvailableCoursesFromDB();
+    public List<CourseDTO> fetchAvailableCourses() {
+        List<CourseDTO> courseList = bookingRepository.fetchAvailableCoursesFromDB();  
         
-        //Placeholder
-        List<String> courseList = new ArrayList<>();
-        courseList.add("ID1212");
-        courseList.add("ID2000");
+        for(CourseDTO course : courseList){
+        System.out.println(course.getCourseName());
+        System.out.println(course.getCourseId());
         
+        }
         return courseList;
     }
 }

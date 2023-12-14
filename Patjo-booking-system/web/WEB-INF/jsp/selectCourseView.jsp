@@ -26,11 +26,11 @@
 <body>
     <h1>Select a course</h1>
 
-    <form action="booking" method="get" onsubmit="return validateForm()">
+    <form action="booking/timeslots" method="get" onsubmit="return validateForm()">
         <c:forEach var="course" items="${courseList}">
             <label>
-                <input type="radio" name="selectedCourse" value="${course}">
-                ${course}
+                <input type="radio" name="selectedCourse" value="${course.courseId}">
+                ${course.courseName}
             </label><br>
         </c:forEach>
         <input type="submit" value="Select course">
