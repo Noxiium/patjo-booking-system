@@ -1,24 +1,27 @@
-
 package controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 
- * MainPageController class handles redirecting to the mainPageView.
+ * MainPageController class handles redirecting to the mainPageView and loginView.
  * 
  */
 
 @Controller
-@RequestMapping("/mainPage")
 public class MainPageController {
     
-    @GetMapping
+    @RequestMapping("/mainPage")
     public String showMainView(){
     
         return "mainPageView";
     }
+    
+    @RequestMapping("/logout")
+    public String logout(){
+        System.out.println("logout - method");
+    return "redirect:/";
+    } 
     
 }
