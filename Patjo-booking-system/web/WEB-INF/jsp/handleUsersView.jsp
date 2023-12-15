@@ -27,7 +27,7 @@
         <hr style="margin-top: 20px; margin-bottom: 20px;">
 
         <form id="addUser" method="post" action="addUser" autocomplete="off" style="margin-top: 20px;" onsubmit="return validateAddUserForms()">
-            <h2> Add User: </h2>
+            <h2> Create new User: </h2>
             <label for="username">Username:</label>
             <input type="email" id="username" name="username">
             

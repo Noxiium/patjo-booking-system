@@ -15,10 +15,7 @@
     </head>
     <body>
        
-        <h1>Student page!</h1>
-        
-        <p>Welcome, ${sessionScope.username}!</p>
-        <p>Your User ID is: ${sessionScope.userId}</p>
+        <h1>Student page</h1>
         
         <form action="booking/showcourses" method="get">
     <input type="submit" value="Show Courses"/>

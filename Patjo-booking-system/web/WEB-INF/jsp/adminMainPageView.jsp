@@ -7,11 +7,8 @@
     <title>JSP Page</title>
 </head>
 <body>
-    <h1>Admin page!</h1>
-    
-    <p>Welcome, ${username}!</p>
-    <p>Your User ID is: ${userId}</p>
-    
+    <h1>Admin page</h1>
+ 
     <form action="users/showusers" method="get">
     <input type="submit" value="Handle Users" name="submit-button" />
 </form>
