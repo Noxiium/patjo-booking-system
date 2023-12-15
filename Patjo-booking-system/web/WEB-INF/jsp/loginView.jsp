@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Ultimate PATJO Quiz Game</title>
+    <title>Patjo Booking System</title>
     <style>
         body {
             text-align: center;
