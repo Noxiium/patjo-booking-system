@@ -1,5 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ include file="header.jsp" %> 
 
 <!DOCTYPE html>
 <html>
@@ -27,14 +29,32 @@
     <h1>Select a course to show available time slots</h1>
 
     <form action="showtimeslots" method="get" onsubmit="return validateForm()">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Choose</th>
+                    <th>Course Name</th>
+                </tr>
+            </thead>
+            <tbody>
         <c:forEach var="course" items="${courseList}">
-            <label>
-                <input type="radio" name="selectedCourse" value="${course.courseId}">
-                ${course.courseName}
-            </label><br>
+            <tr>
+                <td>
+                    <label>
+                        <input type="radio" name="selectedCourse" value="${course.courseId}">
+                    </label>
+                </td>
+                <td>  ${course.courseName}</td>
+            </tr>
         </c:forEach>
+            </tbody>
+        </table>
+        <br>
         <input type="submit" value="Select course">
         <input type="button" value="Main view" onclick="toMainView()">
     </form>
+
+    
+    
 </body>
 </html>
