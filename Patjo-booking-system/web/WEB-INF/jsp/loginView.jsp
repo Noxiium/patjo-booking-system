@@ -44,7 +44,7 @@
 </head>
 <body>
 
-<h2>Ultimate PATJO Quiz Game</h2>
+<h2>Patjo Booking System</h2>
 
 <form action="" method="post">
     <input type="email" id="username" name="username" placeholder="Email" required onblur="validateEmail()"><br>
