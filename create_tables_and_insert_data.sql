@@ -32,7 +32,8 @@ CREATE TABLE booking(
 
 CREATE TABLE list(
     list_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    users_id INT NOT NULL REFERENCES users(users_id)
+    users_id INT NOT NULL REFERENCES users(users_id),
+	course_id INT NOT NULL REFERENCES course(course_id)
 );
 
 CREATE TABLE booking_course (
@@ -82,9 +83,9 @@ VALUES
 (3,1);
 
 -- Beda creates a new list
-INSERT INTO list(users_id) 
+INSERT INTO list(users_id,course_id) 
 VALUES
-(2);
+(2,1);
 
 -- insert two bookings
 INSERT INTO booking(booking_type_of_session, booking_location, start_time) 
@@ -92,13 +93,13 @@ VALUES
 ('labbar', 'zoom', TIMESTAMP('2023-12-23 10:15:00.00')),
 ('labbar', 'zoom', TIMESTAMP('2023-12-23 10:30:00.00'));
 
--- cross reference the added bookings with the list
+-- Cross-reference the added bookings with the list
 INSERT INTO booking_list(list_id,booking_id)
 VALUES
 (1,1),
 (1,2);
 
--- cross reference -- cross reference the added bookings with cource
+-- cross reference -- cross reference the added bookings with course
 INSERT INTO booking_course(booking_id,course_id)
 VALUES
 (1,1),
