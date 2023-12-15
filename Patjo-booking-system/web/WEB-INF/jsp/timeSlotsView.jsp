@@ -60,8 +60,8 @@
                 </table>
                 <br>
                 <input type="submit" value="Select time slot">
+                <input type="button" value="Select another course" onclick="toSelectCourse()">
             </form>
-            <input type="button" value="Main view" onclick="toMainView()">
         </c:if>
         <c:if test="${empty bookingList}">
             <p>No available time slots</p>
