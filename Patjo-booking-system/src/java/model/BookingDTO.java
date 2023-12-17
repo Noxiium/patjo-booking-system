@@ -14,12 +14,23 @@ public class BookingDTO implements Serializable {
     private String typeOfSession;
     private String location;
     private String startTime;
+    private Boolean isAvailable;
 
-    public BookingDTO(int id, String typeOfSession, String location, String startTime) {
+    public Boolean getIsAvailable() {
+        return isAvailable;
+    }
+
+    public void setIsAvailable(Boolean isAvailable) {
+        this.isAvailable = isAvailable;
+    }
+    
+
+    public BookingDTO(int id, String typeOfSession, String location, String startTime, Boolean isAvailable) {
         this.id = id;
         this.typeOfSession = typeOfSession;
         this.location = location;
         this.startTime = startTime;
+        this.isAvailable = isAvailable;
     }
 
     public BookingDTO() {
