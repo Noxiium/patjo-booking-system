@@ -7,13 +7,29 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Patjo Booking System</title>
+
+        <style>
+            .disabled-label {
+                color: #808080; 
+                font-weight: lighter; 
+            }
+            
+            td {
+                padding: 4px;
+                
+            }
+             th {
+                padding: 4px; 
+                text-align: center;
+            }
+        </style>
         <script>
             function toMainView() {
                 window.location.href = '/Patjo-booking-system/mainPage';
             }
-            
-            function toSelectCourse(){
-                 window.location.href = '/Patjo-booking-system/booking/showcourses';
+
+            function toSelectCourse() {
+                window.location.href = '/Patjo-booking-system/booking/showcourses';
             }
 
             function validateForm() {
@@ -30,7 +46,7 @@
     </head>
     <body>
         <h1>Select a time slot</h1>
-   
+
         <c:if test="${not empty bookingList}">
             <form action="book-time-slot" method="post" onsubmit="return validateForm()">
                 <table border="1">
@@ -47,14 +63,25 @@
                             <tr>
                                 <td>
                                     <label>
-                                        <input type="radio" name="selectedTimeSlot" value="${booking.id}">
+                                        <input type="radio" name="selectedTimeSlot" value="${booking.id}" 
+                                               ${not booking.isAvailable ? 'disabled' : ''} 
+                                               class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                        <span class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                            ${booking.isAvailable ? '' : 'Full '}
+                                        </span>
                                     </label>
                                 </td>
-                                <td>${booking.typeOfSession}</td>
-                                <td>${booking.location}</td>
-                                <td>${booking.startTime}</td>
+                                <td class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                    ${booking.typeOfSession}
+                                </td>
+                                <td class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                    ${booking.location}
+                                </td>
+                                <td class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                    ${booking.startTime}
+                                </td>
                             </tr>
-                    
+
                         </c:forEach>
                     </tbody>
                 </table>
@@ -67,6 +94,6 @@
             <p>No available time slots</p>
             <input type="button" value="Select another course" onclick="toSelectCourse()">
         </c:if>
-        
+
     </body>
 </html>
