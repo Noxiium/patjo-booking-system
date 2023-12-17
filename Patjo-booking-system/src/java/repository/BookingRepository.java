@@ -1,6 +1,5 @@
 package repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import model.BookingDTO;
 import model.CourseDTO;
@@ -47,6 +46,17 @@ public class BookingRepository {
                         rs.getString("START_TIME")
                 )
         );
+    }
+
+    /**
+     * Inserts a booked time slot into the USERS_BOOKING table.
+     *
+     * @param selectedTimeSlotId The ID of the selected time slot.
+     * @param userId The ID of the user making the booking.
+     */
+    public void insertBookedTimeIntoDB(Integer selectedTimeSlotId, Integer userId) {
+        String query = "INSERT INTO BOOKING.USERS_BOOKING(USERS_ID,BOOKING_ID)VALUES(?, ?)";
+        jdbcTemplate.update(query, userId, selectedTimeSlotId);
     }
 
 }
