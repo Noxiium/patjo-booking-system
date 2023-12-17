@@ -43,7 +43,8 @@ public class BookingRepository {
                         rs.getInt("BOOKING_ID"),
                         rs.getString("BOOKING_TYPE_OF_SESSION"),
                         rs.getString("BOOKING_LOCATION"),
-                        rs.getString("START_TIME")
+                        rs.getString("START_TIME"),
+                        rs.getBoolean("AVAILABLE")
                 )
         );
     }
@@ -57,6 +58,19 @@ public class BookingRepository {
     public void insertBookedTimeIntoDB(Integer selectedTimeSlotId, Integer userId) {
         String query = "INSERT INTO BOOKING.USERS_BOOKING(USERS_ID,BOOKING_ID)VALUES(?, ?)";
         jdbcTemplate.update(query, userId, selectedTimeSlotId);
+
+        updateAvailability(selectedTimeSlotId);
     }
 
+    /**
+     * Update selected time slot column in DB , set AVAILABLE to FALSE.
+     *
+     * @param selectedTimeSlotId The ID of the selected time slot.
+     */
+    private void updateAvailability(Integer selectedTimeSlotId) {
+        String query = "UPDATE BOOKING.BOOKING SET AVAILABLE = FALSE WHERE BOOKING_ID = ?";
+        jdbcTemplate.update(query, selectedTimeSlotId);
+    }
 }
+
+
