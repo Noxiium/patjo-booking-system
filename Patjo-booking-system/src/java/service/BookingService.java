@@ -59,12 +59,24 @@ public class BookingService {
      * @param session The HttpSession containing user information.
      */
     public void saveBookedTime(String selectedTimeSlot, HttpSession session) {
-        
+
         // Retrieve the userId from the current session
         Integer userId = (Integer) session.getAttribute("userId");
-        
+
         // Convert the selected time slot string to an Integer
         Integer selectedTimeSlotId = Integer.valueOf(selectedTimeSlot);
         bookingRepository.insertBookedTimeIntoDB(selectedTimeSlotId, userId);
+    }
+
+    /**
+     * Fetches the booked time slots for the current user..
+     *
+     * @param session The HttpSession containing user information.
+     * @return A list of BookingDTO objects representing the user's bookings.
+     */
+    public List<BookingDTO> fetchUserBookings(HttpSession session) {
+        Integer userId = (Integer) session.getAttribute("userId");
+        List<BookingDTO> userBookings = bookingRepository.fetchUserBookingsFromDB(userId);
+        return userBookings;
     }
 }

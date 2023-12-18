@@ -71,6 +71,23 @@ public class BookingRepository {
         String query = "UPDATE BOOKING.BOOKING SET AVAILABLE = FALSE WHERE BOOKING_ID = ?";
         jdbcTemplate.update(query, selectedTimeSlotId);
     }
+
+    /**
+     * Fetches the booked time slots for the current user from the database.
+     *
+     * @param userId, The ID for the current user
+     * @return A list of BookingDTO objects representing the user's bookings.
+     */
+    public List<BookingDTO> fetchUserBookingsFromDB(Integer userId) {
+        String query = "SELECT B.* FROM BOOKING.USERS_BOOKING UB JOIN BOOKING.BOOKING B ON UB.BOOKING_ID = B.BOOKING_ID WHERE UB.USERS_ID = ?";
+
+        return jdbcTemplate.query(query, (rs, rowNum)
+                -> new BookingDTO(
+                        rs.getInt("BOOKING_ID"),
+                        rs.getString("BOOKING_TYPE_OF_SESSION"),
+                        rs.getString("BOOKING_LOCATION"),
+                        rs.getString("START_TIME"),
+                        rs.getBoolean("AVAILABLE")
+                ), userId);
+    }
 }
-
-

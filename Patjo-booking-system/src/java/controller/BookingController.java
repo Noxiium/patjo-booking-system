@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import service.BookingService;
 
 /**
@@ -35,7 +37,7 @@ public class BookingController {
      * @param model
      * @return selectCourseView
      */
-    @RequestMapping("/booking/showcourses")
+    @RequestMapping("/showcourses")
     public String showAvailableCourses(Model model) {
         List<CourseDTO> courseList = bookingService.fetchAvailableCourses();
         model.addAttribute("courseList", courseList);
@@ -53,7 +55,7 @@ public class BookingController {
      * @param model
      * @return timeSlotsView
      */
-    @RequestMapping("/booking/showtimeslots")
+    @RequestMapping("/showtimeslots")
     public String showBookingListForCourse(@RequestParam("selectedCourse") int selectedCourseId, Model model) {
         System.out.println("selected course id: " + selectedCourseId);
         List<BookingDTO> bookingList = bookingService.fetchBookingListForCourse(selectedCourseId);
@@ -63,20 +65,44 @@ public class BookingController {
     }
 
     /**
-     * Handles the request to book an available time slot, saves the booking information in
-     * the database, and returns the view for confirming the booked time slot.
+     * Handles the request to book an available time slot, saves the booking
+     * information in the database, and returns the main view for confirming the
+     * booked time slot.
      *
      * @param selectedTimeSlot The selected time slot to be booked.
      * @param session The HttpSession containing user information.
+     * @param redirectAttributes Used to add flash attributes for the next
+     * redirect.
      * @return The view name for confirming the booked time slot.
      */
-    @RequestMapping("/booking/book-time-slot")
-    public String confirmBookedTime(@RequestParam("selectedTimeSlot") String selectedTimeSlot, HttpSession session) {
+    @RequestMapping("/booktimeslot")
+    public String confirmBookedTime(@RequestParam("selectedTimeSlot") String selectedTimeSlot,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
 
         bookingService.saveBookedTime(selectedTimeSlot, session);
 
-        System.out.println("SelectedTimeSlot = " + selectedTimeSlot);
+        // Add a flash attribute to indicate successful booking confirmation
+        redirectAttributes.addFlashAttribute("confirmation", "confirmation");
 
-        return "confirmedTimeSlotView";
+        return "redirect:/main";
+
+    }
+
+    /**
+     * Handles the request to show the booked time slots for the current user,
+     * fetches the user's bookings from the database, and returns the view
+     * displaying the booked time slots.
+     *
+     * @param session The HttpSession containing user information.
+     * @param model The model to add attributes for the view.
+     * @return The view name for displaying the booked time slots.
+     */
+    @RequestMapping("/mybookings")
+    public String showUserBookings(HttpSession session, Model model) {
+        List<BookingDTO> userBookings = bookingService.fetchUserBookings(session);
+        model.addAttribute("userBookings", userBookings);
+
+        return "bookedTimeSlotsView";
     }
 }

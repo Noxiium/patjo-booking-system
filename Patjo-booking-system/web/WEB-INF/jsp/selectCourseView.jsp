@@ -20,7 +20,7 @@
         </style>
         <script>
             function toMainView() {
-                window.location.href = '/Patjo-booking-system/mainPage';
+                window.location.href = '/Patjo-booking-system/main';
             }
 
             function validateForm() {
@@ -54,7 +54,7 @@
                                     <input type="radio" name="selectedCourse" value="${course.courseId}">
                                 </label>
                             </td>
-                            <td>  ${course.courseName}</td>
+                            <td>  ${course.courseName} </td>
                         </tr>
                     </c:forEach>
                 </tbody>

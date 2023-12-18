@@ -10,15 +10,32 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <style>
+            .confirmation-container {
+                background-color: lightgreen;
+                padding: 8px;
+            }
+        </style>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Patjo Booking System</title>
+
     </head>
     <body>
-       
+
         <h1>Student page</h1>
-        
-        <form action="booking/showcourses" method="get">
-    <input type="submit" value="Show Courses"/>
-</form>
+        <c:if test="${not empty confirmation}">
+            <div class="confirmation-container">
+                <p>Confirmation: Your booked time slot is confirmed.</p>
+                <p>You can see all your booked time slots under "My bookings".</p>
+            </div>
+        </c:if>
+
+        <form action="showcourses" method="get">
+            <input type="submit" value="Show Courses"/>
+        </form>
+        <form action="mybookings" method="post">
+            <input type="submit" value=" My Bookings"/>
+        </form>
+
     </body>
 </html>
