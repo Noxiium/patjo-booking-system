@@ -79,4 +79,18 @@ public class BookingService {
         List<BookingDTO> userBookings = bookingRepository.fetchUserBookingsFromDB(userId);
         return userBookings;
     }
+
+    /**
+     * Removes a booked time slot for the current user.
+     *
+     * @param selectedTimeSlot The ID of the selected time slot to be removed.
+     * @param session The HttpSession containing user information.
+     */
+    public void removeBookedTimeSlot(String selectedTimeSlot, HttpSession session) {
+        Integer selectedTimeSlotId = Integer.valueOf(selectedTimeSlot);
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        bookingRepository.removeBookedTimeSlotFromDB(selectedTimeSlotId, userId);
+    }
+
 }

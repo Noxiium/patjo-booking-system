@@ -105,4 +105,23 @@ public class BookingController {
 
         return "bookedTimeSlotsView";
     }
+
+    /**
+     * Handles the request to remove a booked time slot, delegates the operation
+     * to the booking service, and returns the main view for confirming the
+     * deleted time slot.
+     *
+     * @param selectedTimeSlot The ID of the selected time slot to be removed.
+     * @param session The HttpSession containing user information.
+     * @return The view name for displaying the booked time slots.
+     */
+    @RequestMapping("/removetimeslot")
+    public String removeBookedTimeSlot(@RequestParam("selectedTimeSlot") String selectedTimeSlot, HttpSession session, RedirectAttributes redirectAttributes) {
+
+        bookingService.removeBookedTimeSlot(selectedTimeSlot, session);
+        
+       // Add a flash attribute to indicate successful booking confirmation
+        redirectAttributes.addFlashAttribute("deletedtimeslot", "deletedtimeslot");
+         return "redirect:/main";
+    }
 }
