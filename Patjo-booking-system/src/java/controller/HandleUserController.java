@@ -59,6 +59,7 @@ public class HandleUserController {
             userService.addNewUser(username, password, isAdmin);
         } catch (DuplicateKeyException dke){
             model.addAttribute("errorMessage", "Username already exists. Please choose a different username.");
+            //TODO Handle the errorMessage in handleUserView so the user see the error.
         }
         List<User> users = userService.getAllUsers();
         model.addAttribute("userList", users);
