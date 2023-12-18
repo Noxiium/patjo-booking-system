@@ -90,4 +90,20 @@ public class BookingRepository {
                         rs.getBoolean("AVAILABLE")
                 ), userId);
     }
+
+    /**
+     * Removes a booked time slot from the USERS_BOOKING table for the specified
+     * user. Marks the corresponding time slot as available in the BOOKING
+     * table.
+     *
+     * @param selectedTimeSlotId The ID of the selected time slot to be removed.
+     * @param userId The ID of the specified user
+     */
+    public void removeBookedTimeSlotFromDB(Integer selectedTimeSlotId, Integer userId) {
+        String removeQuery = "DELETE FROM BOOKING.USERS_BOOKING WHERE USERS_ID = ? AND BOOKING_ID = ?";
+        jdbcTemplate.update(removeQuery, userId, selectedTimeSlotId);
+
+        String updateQuery = "UPDATE BOOKING.BOOKING SET AVAILABLE = TRUE WHERE BOOKING_ID = ?";
+        jdbcTemplate.update(updateQuery, selectedTimeSlotId);
+    }
 }
