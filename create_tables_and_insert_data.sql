@@ -27,7 +27,8 @@ CREATE TABLE booking(
 	booking_id INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
 	booking_type_of_session VARCHAR(64) NOT NULL, -- en sträng som beskriver bokningarna, t ex "labbar"
 	booking_location VARCHAR(16) NOT NULL, -- Sal på campus eller via zoom.
-	start_time TIMESTAMP NOT NULL -- Vilket datum och tidpunkt redovisningarna börjar 
+	start_time TIMESTAMP NOT NULL, -- Vilket datum och tidpunkt redovisningarna börjar 
+	available BOOLEAN  
 );
 
 CREATE TABLE list(
@@ -88,18 +89,18 @@ VALUES
 (2,1);
 
 -- insert two bookings
-INSERT INTO booking(booking_type_of_session, booking_location, start_time) 
+INSERT INTO booking(booking_type_of_session, booking_location, start_time, available) 
 VALUES 
-('labbar', 'zoom', TIMESTAMP('2023-12-23 10:15:00.00')),
-('labbar', 'zoom', TIMESTAMP('2023-12-23 10:30:00.00'));
+('labbar', 'zoom', TIMESTAMP('2023-12-23 10:15:00.00'), FALSE),
+('labbar', 'zoom', TIMESTAMP('2023-12-23 10:30:00.00'), TRUE);
 
--- Cross-reference the added bookings with the list
+-- cross reference the added bookings with the list
 INSERT INTO booking_list(list_id,booking_id)
 VALUES
 (1,1),
 (1,2);
 
--- cross reference -- cross reference the added bookings with course
+-- cross reference -- cross reference the added bookings with cource
 INSERT INTO booking_course(booking_id,course_id)
 VALUES
 (1,1),
