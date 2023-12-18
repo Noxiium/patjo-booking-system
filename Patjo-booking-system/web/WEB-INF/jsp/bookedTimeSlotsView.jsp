@@ -23,10 +23,10 @@
             }
         </style>
         <script>
-             function toMainView() {
+            function toMainView() {
                 window.location.href = '/Patjo-booking-system/main';
             }
-             function validateForm() {
+            function validateForm() {
                 var selectedCourse = document.querySelector('input[name="selectedTimeSlot"]:checked');
 
                 if (!selectedCourse) {
@@ -40,7 +40,11 @@
     </head>
     <body>
         <h1>My booked Time Slots!</h1>
-        
+        <c:if test="${empty userBookings}">
+            No booked time slots.
+            <br>
+            <br>
+        </c:if>
         <c:if test="${not empty userBookings}">
             <form action="removetimeslot" method="post" onsubmit="return validateForm()">
                 <table border="1">
@@ -72,10 +76,10 @@
                         </c:forEach>
                     </tbody>
                 </table>
-            </c:if>
                 <br>
                 <input type="submit" value="Remove booked time slot">
-                <input type="button" value="Main view" onclick="toMainView()">
-            </form>
-        </body>
-    </html>
+            </c:if>
+            <input type="button" value="Main view" onclick="toMainView()">
+        </form>
+    </body>
+</html>

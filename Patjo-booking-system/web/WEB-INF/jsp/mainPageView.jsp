@@ -15,6 +15,10 @@
                 background-color: lightgreen;
                 padding: 8px;
             }
+            .deleted-container {
+                background-color: lightcoral;
+                padding: 8px;
+            }
         </style>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Patjo Booking System</title>
@@ -23,11 +27,20 @@
     <body>
 
         <h1>Student page</h1>
+        
         <c:if test="${not empty confirmation}">
             <div class="confirmation-container">
-                <p>Confirmation: Your booked time slot is confirmed.</p>
-                <p>You can see all your booked time slots under "My bookings".</p>
+                <p>Confirmed: Your reserved time slot has been confirmed.</p>
+                <p>View all your booked time slots under "My Bookings".</p>
             </div>
+            <br>
+        </c:if>
+        <c:if test="${not empty deletedtimeslot}">
+            <div class="deleted-container">
+                <p>Booking Canceled: Your reserved time slot has been canceled.</p>
+                <p>View all your booked time slots under "My Bookings".</p>
+            </div>
+            <br>
         </c:if>
 
         <form action="showcourses" method="get">
