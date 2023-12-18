@@ -25,11 +25,11 @@
         </style>
         <script>
             function toMainView() {
-                window.location.href = '/Patjo-booking-system/mainPage';
+                window.location.href = '/Patjo-booking-system/main';
             }
 
             function toSelectCourse() {
-                window.location.href = '/Patjo-booking-system/booking/showcourses';
+                window.location.href = '/Patjo-booking-system/showcourses';
             }
 
             function validateForm() {
@@ -48,7 +48,7 @@
         <h1>Select a time slot</h1>
 
         <c:if test="${not empty bookingList}">
-            <form action="book-time-slot" method="post" onsubmit="return validateForm()">
+            <form action="booktimeslot" method="post" onsubmit="return validateForm()">
                 <table border="1">
                     <thead>
                         <tr>
