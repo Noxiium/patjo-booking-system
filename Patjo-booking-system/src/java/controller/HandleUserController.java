@@ -7,6 +7,7 @@ package controller;
 import java.util.List;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
@@ -53,11 +54,15 @@ public class HandleUserController {
                           @RequestParam(defaultValue = "false") 
                           boolean isAdmin, 
                           Model model) {
-        System.out.print("HandleUserContr - POST");
         // Create User object and save to database using UserService or UserRepository
-        userService.addNewUser(username, password, isAdmin);
+        try{
+            userService.addNewUser(username, password, isAdmin);
+        } catch (DuplicateKeyException dke){
+            model.addAttribute("errorMessage", "Username already exists. Please choose a different username.");
+        }
         List<User> users = userService.getAllUsers();
         model.addAttribute("userList", users);
+        
         
         // Redirect to the same page after successful addition
         return "redirect:/users/showusers"; // Replace 'adminPage' with your actual page URL

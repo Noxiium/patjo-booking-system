@@ -37,6 +37,11 @@
             <label for="isAdmin">Admin:</label>
             <input type="checkbox" id="isAdmin" name="isAdmin">
             <input type="submit" value="Create new user">
+            <% if (request.getAttribute("errorMessage") != null) { %>
+                <div class="error-message">
+                    <%= request.getAttribute("errorMessage") %>
+                </div>
+<%          } %>
         </form>
 
         <hr style="margin-top: 20px; margin-bottom: 20px;">
