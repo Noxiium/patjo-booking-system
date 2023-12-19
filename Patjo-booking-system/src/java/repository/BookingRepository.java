@@ -24,21 +24,23 @@ public class BookingRepository {
     }
 
     public List<CourseDTO> fetchAvailableCoursesFromDB() {
-        String query = "SELECT COURSE_ID,COURSE_NAME FROM BOOKING.COURSE";
+        String query = "SELECT COURSE_ID,COURSE_NAME FROM PATJODB.COURSE";
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(CourseDTO.class));
     }
 
     public List<BookingDTO> fetchBookingListForCourseFromDB(int courseId) {
+        System.out.println("courseId REPO: " + courseId);
         String query = """
-                       SELECT B.*
-                       FROM BOOKING.BOOKING B
-                       WHERE B.BOOKING_ID IN (
-                           SELECT BL.BOOKING_ID
-                           FROM BOOKING.LIST L
-                           JOIN BOOKING.BOOKING_LIST BL ON L.LIST_ID = BL.LIST_ID
-                           WHERE L.course_id =""" + courseId + ")";
+                   SELECT B.*
+                   FROM PATJODB.BOOKING B
+                   WHERE B.BOOKING_ID IN (
+                       SELECT BL.BOOKING_ID
+                       FROM PATJODB.LIST L
+                       JOIN PATJODB.BOOKING_LIST BL ON L.LIST_ID = BL.LIST_ID
+                       WHERE L.course_id = ?
+                   )""";
 
-        return jdbcTemplate.query(query, (rs, rowNum)
+        return jdbcTemplate.query(query, new Object[]{courseId}, (rs, rowNum)
                 -> new BookingDTO(
                         rs.getInt("BOOKING_ID"),
                         rs.getString("BOOKING_TYPE_OF_SESSION"),
@@ -56,7 +58,7 @@ public class BookingRepository {
      * @param userId The ID of the user making the booking.
      */
     public void insertBookedTimeIntoDB(Integer selectedTimeSlotId, Integer userId) {
-        String query = "INSERT INTO BOOKING.USERS_BOOKING(USERS_ID,BOOKING_ID)VALUES(?, ?)";
+        String query = "INSERT INTO PATJODB.USERS_BOOKING(USERS_ID,BOOKING_ID)VALUES(?, ?)";
         jdbcTemplate.update(query, userId, selectedTimeSlotId);
 
         updateAvailability(selectedTimeSlotId);
@@ -68,7 +70,7 @@ public class BookingRepository {
      * @param selectedTimeSlotId The ID of the selected time slot.
      */
     private void updateAvailability(Integer selectedTimeSlotId) {
-        String query = "UPDATE BOOKING.BOOKING SET AVAILABLE = FALSE WHERE BOOKING_ID = ?";
+        String query = "UPDATE PATJODB.BOOKING SET AVAILABLE = FALSE WHERE BOOKING_ID = ?";
         jdbcTemplate.update(query, selectedTimeSlotId);
     }
 
@@ -79,7 +81,7 @@ public class BookingRepository {
      * @return A list of BookingDTO objects representing the user's bookings.
      */
     public List<BookingDTO> fetchUserBookingsFromDB(Integer userId) {
-        String query = "SELECT B.* FROM BOOKING.USERS_BOOKING UB JOIN BOOKING.BOOKING B ON UB.BOOKING_ID = B.BOOKING_ID WHERE UB.USERS_ID = ?";
+        String query = "SELECT B.* FROM PATJODB.USERS_BOOKING UB JOIN PATJODB.BOOKING B ON UB.BOOKING_ID = B.BOOKING_ID WHERE UB.USERS_ID = ?";
 
         return jdbcTemplate.query(query, (rs, rowNum)
                 -> new BookingDTO(
@@ -100,10 +102,10 @@ public class BookingRepository {
      * @param userId The ID of the specified user
      */
     public void removeBookedTimeSlotFromDB(Integer selectedTimeSlotId, Integer userId) {
-        String removeQuery = "DELETE FROM BOOKING.USERS_BOOKING WHERE USERS_ID = ? AND BOOKING_ID = ?";
+        String removeQuery = "DELETE FROM PATJODB.USERS_BOOKING WHERE USERS_ID = ? AND BOOKING_ID = ?";
         jdbcTemplate.update(removeQuery, userId, selectedTimeSlotId);
 
-        String updateQuery = "UPDATE BOOKING.BOOKING SET AVAILABLE = TRUE WHERE BOOKING_ID = ?";
+        String updateQuery = "UPDATE PATJODB.BOOKING SET AVAILABLE = TRUE WHERE BOOKING_ID = ?";
         jdbcTemplate.update(updateQuery, selectedTimeSlotId);
     }
 }

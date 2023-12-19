@@ -102,11 +102,16 @@
                 </div>
             </div>
             <input id="deleteButton" type="submit" value="Delete selected users" style="margin-top: 10px;">
+            <input type="button" value="Main view" onclick="toMainView()">
         </form>
+        
 
         <script>
             function addUser() {
                 console.log('add user');
+            }
+            function toMainView() {
+                window.location.href = '/Patjo-booking-system/adminmain';
             }
 
             function deleteSelectedUsers() {

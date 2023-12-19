@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * 
- * MainPageController class handles redirecting to the mainPageView and loginView.
+ * MainPageController class handles redirecting.
  * 
  */
 
@@ -14,9 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MainPageController {
     
     @RequestMapping("/main")
-    public String showMainView(){
+    public String showStudentMainView(){
 
         return "mainPageView";
+    }
+      @RequestMapping("/adminmain")
+    public String showAdminMainView(){
+
+        return "adminMainPageView";
     }
     
     @RequestMapping("/logout")

@@ -18,17 +18,17 @@ public class UserRepository {
     }
 
     public void saveUser(User user) {
-        String sql = "INSERT INTO BOOKING.USERS (USERSNAME, PASSWORD, ADMIN) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO PATJODB.USERS (USERSNAME, PASSWORD, ADMIN) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getIsAdmin());
     }
 
     public Integer fetchUserID(User user) {
-        String query = "SELECT ID FROM BOOKING.USERS WHERE USERSNAME = ? AND PASSWORD = ?";
+        String query = "SELECT ID FROM PATJODB.USERS WHERE USERSNAME = ? AND PASSWORD = ?";
         return jdbcTemplate.queryForObject(query, Integer.class, user.getUsername(), user.getPassword());
     }
 
     public User findByUsername(String username) {
-        String sql = "SELECT * FROM BOOKING.users WHERE usersname = ?";
+        String sql = "SELECT * FROM PATJODB.USERS WHERE usersname = ?";
 
         try {
             return jdbcTemplate.queryForObject(sql, new Object[]{username}, (rs, rowNum) -> {
@@ -46,7 +46,7 @@ public class UserRepository {
     }
 
     public List<User> fetchAllUsersFromDB() {
-        String sql = "SELECT * FROM BOOKING.USERS";
+        String sql = "SELECT * FROM PATJODB.USERS";
 
         try {
             return jdbcTemplate.query(sql, (rs, rowNum) -> {
@@ -70,7 +70,7 @@ public class UserRepository {
      * @return List of booking IDs associated with the user.
      */
     public List<Integer> checkAssociatedBookings(Integer userId) {
-        String query = "SELECT BOOKING_ID FROM BOOKING.USERS_BOOKING WHERE USERS_ID = ?";
+        String query = "SELECT BOOKING_ID FROM PATJODB.USERS_BOOKING WHERE USERS_ID = ?";
         return jdbcTemplate.queryForList(query, Integer.class, userId);
     }
 
@@ -80,7 +80,7 @@ public class UserRepository {
      * @param bookingId ID of the booking to be marked as available.
      */
     public void markAssociatedBookingsAsAvailable(Integer bookingId) {
-        String query = "UPDATE BOOKING.BOOKING SET AVAILABLE = TRUE WHERE BOOKING_ID = ?";
+        String query = "UPDATE PATJODB.BOOKING SET AVAILABLE = TRUE WHERE BOOKING_ID = ?";
         jdbcTemplate.update(query, bookingId);
     }
 
@@ -91,7 +91,7 @@ public class UserRepository {
      * @param userId ID of the user to be removed.
      */
     public void removeAssociatedBookings(Integer bookingId, Integer userId) {
-        String query = "DELETE FROM BOOKING.USERS_BOOKING WHERE USERS_ID = ? AND BOOKING_ID = ?";
+        String query = "DELETE FROM PATJODB.USERS_BOOKING WHERE USERS_ID = ? AND BOOKING_ID = ?";
         jdbcTemplate.update(query, userId, bookingId);
     }
 
@@ -101,7 +101,7 @@ public class UserRepository {
      * @param userId ID of the user to be removed.
      */
     public void removeUserFromDB(Integer userId) {
-        String query = "DELETE FROM BOOKING.USERS WHERE USERS_ID = ?";
+        String query = "DELETE FROM PATJODB.USERS WHERE USERS_ID = ?";
         jdbcTemplate.update(query, userId);
     }
 
