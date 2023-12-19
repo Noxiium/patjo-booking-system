@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package controller;
 
 import java.util.List;
@@ -17,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import service.UserService;
 
 /**
@@ -45,40 +42,45 @@ public class HandleUserController {
         model.addAttribute("nonAdminList", nonAdmins);// Fetch all users from the database
         return "handleUsersView";
     }
-    
+
     // Endpoint to add user
     @PostMapping
     @RequestMapping("/users/addUser")
-    public String addUser(@RequestParam String username, 
-                          @RequestParam String password, 
-                          @RequestParam(defaultValue = "false") 
-                          boolean isAdmin, 
-                          Model model) {
+    public String addUser(@RequestParam String username,
+            @RequestParam String password,
+            @RequestParam(defaultValue = "false") boolean isAdmin,
+            Model model) {
         // Create User object and save to database using UserService or UserRepository
-        try{
+        try {
             userService.addNewUser(username, password, isAdmin);
-        } catch (DuplicateKeyException dke){
+        } catch (DuplicateKeyException dke) {
             model.addAttribute("errorMessage", "Username already exists. Please choose a different username.");
             //TODO Handle the errorMessage in handleUserView so the user see the error.
         }
         List<User> users = userService.getAllUsers();
         model.addAttribute("userList", users);
-        
-        
+
         // Redirect to the same page after successful addition
         return "redirect:/users/showusers"; // Replace 'adminPage' with your actual page URL
     }
-    
-    
+
+    /**
+     * Handles the request to remove selected users and their associated
+     * bookings.
+     *
+     * @param userIds String of user IDs to be removed.
+     * @param model The model for adding attributes.
+     * @param redirectAttributes Used to flash attributes for the redirect.
+     * @return Redirects to the handleUsersView after removing users.
+     */
     @PostMapping
     @RequestMapping("/users/removeUsers")
-    public String removeUsers(@RequestParam("userIds") String userIds, Model model) {
+    public String removeUsers(@RequestParam("userIds") String userIds, Model model, RedirectAttributes redirectAttributes) {
         System.out.println("removeUsers - POST");
         String[] selectedUserIds = userIds.split(",");
-        for (String userId : selectedUserIds) {
-            System.out.println(userId);
-        }
-        
+
+        userService.removeUserAndAssociatedBookings(selectedUserIds);
+        redirectAttributes.addFlashAttribute("deleteduser", "deleteduser");
         return "redirect:/users/showusers";
     }
 }

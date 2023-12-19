@@ -113,6 +113,7 @@ public class BookingController {
      *
      * @param selectedTimeSlot The ID of the selected time slot to be removed.
      * @param session The HttpSession containing user information.
+     * @param redirectAttributes
      * @return The view name for displaying the booked time slots.
      */
     @RequestMapping("/removetimeslot")

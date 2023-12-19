@@ -16,8 +16,6 @@ public class UserRepository {
     public UserRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
-    
-    
 
     public void saveUser(User user) {
         String sql = "INSERT INTO BOOKING.USERS (USERSNAME, PASSWORD, ADMIN) VALUES (?, ?, ?)";
@@ -31,39 +29,80 @@ public class UserRepository {
 
     public User findByUsername(String username) {
         String sql = "SELECT * FROM BOOKING.users WHERE usersname = ?";
-        
-        try{
-        return jdbcTemplate.queryForObject(sql, new Object[]{username}, (rs, rowNum) -> {
-            User user = new User();
-            user.setUserId(rs.getInt("users_id"));
-            user.setUsername(rs.getString("usersname"));
-            user.setPassword(rs.getString("password"));
-            user.setIsAdmin(rs.getInt("admin"));
 
-            return user;
-        });
-        } catch (EmptyResultDataAccessException e){
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{username}, (rs, rowNum) -> {
+                User user = new User();
+                user.setUserId(rs.getInt("users_id"));
+                user.setUsername(rs.getString("usersname"));
+                user.setPassword(rs.getString("password"));
+                user.setIsAdmin(rs.getInt("admin"));
+
+                return user;
+            });
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
-    
-    public List<User> fetchAllUsersFromDB(){
+
+    public List<User> fetchAllUsersFromDB() {
         String sql = "SELECT * FROM BOOKING.USERS";
-        
-        try{
-        return jdbcTemplate.query(sql, (rs, rowNum) -> {
-            User user = new User();
-            user.setUserId(rs.getInt("users_id"));
-            user.setUsername(rs.getString("usersname"));
-            user.setPassword(rs.getString("password"));
-            user.setIsAdmin(rs.getInt("admin"));
-            return user;
-        });
-        } catch (EmptyResultDataAccessException e){
+
+        try {
+            return jdbcTemplate.query(sql, (rs, rowNum) -> {
+                User user = new User();
+                user.setUserId(rs.getInt("users_id"));
+                user.setUsername(rs.getString("usersname"));
+                user.setPassword(rs.getString("password"));
+                user.setIsAdmin(rs.getInt("admin"));
+                return user;
+            });
+        } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
-    
+
     //TODO method, check if password match
+    /**
+     * Retrieves a list of booking IDs associated with a given user.
+     *
+     * @param userId ID of the user.
+     * @return List of booking IDs associated with the user.
+     */
+    public List<Integer> checkAssociatedBookings(Integer userId) {
+        String query = "SELECT BOOKING_ID FROM BOOKING.USERS_BOOKING WHERE USERS_ID = ?";
+        return jdbcTemplate.queryForList(query, Integer.class, userId);
+    }
+
+    /**
+     * Marks the associated booking as available in the database.
+     *
+     * @param bookingId ID of the booking to be marked as available.
+     */
+    public void markAssociatedBookingsAsAvailable(Integer bookingId) {
+        String query = "UPDATE BOOKING.BOOKING SET AVAILABLE = TRUE WHERE BOOKING_ID = ?";
+        jdbcTemplate.update(query, bookingId);
+    }
+
+    /**
+     * Removes the association between a user and a booking from the database.
+     *
+     * @param bookingId ID of the booking to be removed.
+     * @param userId ID of the user to be removed.
+     */
+    public void removeAssociatedBookings(Integer bookingId, Integer userId) {
+        String query = "DELETE FROM BOOKING.USERS_BOOKING WHERE USERS_ID = ? AND BOOKING_ID = ?";
+        jdbcTemplate.update(query, userId, bookingId);
+    }
+
+    /**
+     * Removes a user from the database.
+     *
+     * @param userId ID of the user to be removed.
+     */
+    public void removeUserFromDB(Integer userId) {
+        String query = "DELETE FROM BOOKING.USERS WHERE USERS_ID = ?";
+        jdbcTemplate.update(query, userId);
+    }
 
 }
