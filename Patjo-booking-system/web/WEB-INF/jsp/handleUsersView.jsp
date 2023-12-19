@@ -20,28 +20,39 @@
                 margin-bottom: 1px; /* Adjust margin as needed */
                 margin-top: 1px;
             }
+             .deleted-container {
+                background-color: lightcoral;
+                padding: 8px;
+            }
         </style>
     </head>
     <body>
         <h1>Admin Handle User Page</h1>
         <hr style="margin-top: 20px; margin-bottom: 20px;">
+        <c:if test="${not empty deleteduser}">
+            <div class="deleted-container">
+                <p>User(s) deleted: The selected user accounts have been successfully removed.</p>
+                <p>Any associated reservations have been canceled. </p>
 
+            </div>
+            <br>
+        </c:if>
         <form id="addUser" method="post" action="addUser" autocomplete="off" style="margin-top: 20px;" onsubmit="return validateAddUserForms()">
             <h2> Create new User: </h2>
             <label for="username">Username:</label>
             <input type="email" id="username" name="username">
-            
+
             <label for="password">Password:</label>
             <input type="text" id="password" name="password">
-            
+
             <label for="isAdmin">Admin:</label>
             <input type="checkbox" id="isAdmin" name="isAdmin">
             <input type="submit" value="Create new user">
-            <% if (request.getAttribute("errorMessage") != null) { %>
-                <div class="error-message">
-                    <%= request.getAttribute("errorMessage") %>
-                </div>
-<%          } %>
+            <% if (request.getAttribute("errorMessage") != null) {%>
+            <div class="error-message">
+                <%= request.getAttribute("errorMessage")%>
+            </div>
+            <%          }%>
         </form>
 
         <hr style="margin-top: 20px; margin-bottom: 20px;">
@@ -114,35 +125,49 @@
                 document.getElementById('selectUsersForm').appendChild(hiddenInput);
             }
             function validateForm() {
-            var radios = document.getElementsByName('userIds');
-            var checked = false;
-            for (var i = 0; i < radios.length; i++) {
-                if (radios[i].checked) {
-                    checked = true;
-                    break;
+                var radios = document.getElementsByName('userIds');
+                var checked = false;
+                for (var i = 0; i < radios.length; i++) {
+                    if (radios[i].checked) {
+                        checked = true;
+                        break;
+                    }
                 }
-            }
-            if (!checked) {
-                alert('You have not selected any users');
-                return false; // Prevent form submission if no subject is selected
-            }
-            return true; // Proceed with form submission
-        }
-        
-        function validateAddUserForms() {
-        const addUserForm = document.getElementById('addUser');
-        const username = addUserForm.querySelector('#username').value.trim();
-        const password = addUserForm.querySelector('#password').value.trim();
+                if (!checked) {
+                    alert('You have not selected any users');
+                    return false; // Prevent form submission if no subject is selected
+                }
 
-        // Check if all fields in the "Add User" form are filled
-        if (username === '' || password === '') {
-            alert('Please fill in all fields');
-            return false; // Prevent form submission
-        }
+                if (confirmDelete()) {
 
-        // If the "Add User" form is validated, proceed to the next form
-        return true;
-    }
+                } else {
+
+                    return false;
+                }
+                return true; // Proceed with form submission
+            }
+            function confirmDelete() {
+                var confirmation = confirm('Are you sure you want to delete the selected user(s)?');
+                var left = (window.innerWidth - 400) / 2; // Justera bredden av popuprutan här
+                var top = (window.innerHeight - 200) / 2; // Justera höjden av popuprutan här
+                window.moveTo(left, top);
+                return confirmation;
+            }
+
+            function validateAddUserForms() {
+                const addUserForm = document.getElementById('addUser');
+                const username = addUserForm.querySelector('#username').value.trim();
+                const password = addUserForm.querySelector('#password').value.trim();
+
+                // Check if all fields in the "Add User" form are filled
+                if (username === '' || password === '') {
+                    alert('Please fill in all fields');
+                    return false; // Prevent form submission
+                }
+
+                // If the "Add User" form is validated, proceed to the next form
+                return true;
+            }
         </script>
     </body>
 </html>
