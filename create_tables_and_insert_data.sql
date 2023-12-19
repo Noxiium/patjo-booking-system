@@ -37,12 +37,12 @@ CREATE TABLE list(
 	course_id INT NOT NULL REFERENCES course(course_id)
 );
 
-CREATE TABLE booking_course (
-    booking_id  INT NOT NULL REFERENCES booking(booking_id),
-    course_id INT NOT NULL REFERENCES course(course_id)
-);
+--CREATE TABLE booking_course (
+--  booking_id  INT NOT NULL REFERENCES booking(booking_id),
+--  course_id INT NOT NULL REFERENCES course(course_id)
+--);
 
-ALTER TABLE booking_course ADD CONSTRAINT PK_booking_course PRIMARY KEY (booking_id,course_id);
+--ALTER TABLE booking_course ADD CONSTRAINT PK_booking_course PRIMARY KEY (booking_id,course_id);
 
 CREATE TABLE users_booking (
     users_id  INT NOT NULL REFERENCES users(users_id),
@@ -70,7 +70,8 @@ INSERT INTO users (usersname, password, admin)
 VALUES 
 ('ada@kth.se', 'qwerty', 0),
 ('beda@kth.se', 'qwerty', 1),
-('test@kth.se', 'test', 0); 
+('test@kth.se', 'test', 0),
+('admin@kth.se', 'test', 1); 
 
 -- Två kurser
 INSERT INTO course (course_name) 
@@ -83,28 +84,36 @@ INSERT INTO users_course(users_id,course_id)
 VALUES
 (3,1);
 
--- Beda creates a new list
+-- Beda creates two lists for course:id 1 (id1212)
 INSERT INTO list(users_id,course_id) 
 VALUES
+(2,1),
 (2,1);
 
--- insert two bookings
+-- insert bookings
 INSERT INTO booking(booking_type_of_session, booking_location, start_time, available) 
 VALUES 
-('labbar', 'zoom', TIMESTAMP('2023-12-23 10:15:00.00'), FALSE),
-('labbar', 'zoom', TIMESTAMP('2023-12-23 10:30:00.00'), TRUE);
+('lab', 'zoom', TIMESTAMP('2023-12-23 10:15:00.00'), FALSE),
+('lab', 'zoom', TIMESTAMP('2023-12-23 10:30:00.00'), TRUE),
+('presentation', 'Room 203', TIMESTAMP('2024-01-19 10:15:00.00'), TRUE),
+('presentation', 'Room 203', TIMESTAMP('2023-01-18 10:30:00.00'), TRUE);
+
 
 -- cross reference the added bookings with the list
 INSERT INTO booking_list(list_id,booking_id)
 VALUES
 (1,1),
-(1,2);
+(1,2),
+(2,3),
+(2,4);
 
 -- cross reference -- cross reference the added bookings with cource
-INSERT INTO booking_course(booking_id,course_id)
-VALUES
-(1,1),
-(2,1);
+--INSERT INTO booking_course(booking_id,course_id)
+--VALUES
+--(1,1),
+--(2,1),
+--(3,1),
+--(4,1);
 
 -- users -> id=3 (test) is registered in booking id=1
 INSERT INTO users_booking(users_id,booking_id)
