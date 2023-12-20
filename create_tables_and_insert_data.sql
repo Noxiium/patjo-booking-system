@@ -1,11 +1,12 @@
 DROP TABLE users_booking;
 DROP TABLE booking_list;
 DROP TABLE list;
-DROP TABLE booking_course;
+--DROP TABLE booking_course;
 DROP TABLE booking;
 DROP TABLE users_course;
 DROP TABLE course;
 DROP TABLE USERS;
+
 
 CREATE SCHEMA patjodb;
 SET CURRENT SCHEMA patjodb;
@@ -45,25 +46,33 @@ CREATE TABLE list(
 --ALTER TABLE booking_course ADD CONSTRAINT PK_booking_course PRIMARY KEY (booking_id,course_id);
 
 CREATE TABLE users_booking (
-    users_id  INT NOT NULL REFERENCES users(users_id),
-    booking_id INT NOT NULL REFERENCES booking(booking_id)
+    users_id  INT NOT NULL REFERENCES users(users_id) ON DELETE CASCADE,
+    booking_id INT NOT NULL REFERENCES booking(booking_id) ON DELETE CASCADE
 );
 
 ALTER TABLE users_booking ADD CONSTRAINT PK_users_booking PRIMARY KEY (users_id,booking_id);
+ALTER TABLE users_booking ADD CONSTRAINT FK_users_booking_0 FOREIGN KEY (users_id) REFERENCES users (users_id) ON DELETE CASCADE;
+ALTER TABLE users_booking ADD CONSTRAINT FK_users_booking_1 FOREIGN KEY (booking_id) REFERENCES booking (booking_id) ON DELETE CASCADE;
+
 
 CREATE TABLE users_course (
- users_id INT NOT NULL REFERENCES users(users_id),
- course_id INT NOT NULL REFERENCES course(course_id)
+ users_id INT NOT NULL REFERENCES users(users_id) ON DELETE CASCADE,
+ course_id INT NOT NULL REFERENCES course(course_id) ON DELETE CASCADE
 );
 
 ALTER TABLE users_course ADD CONSTRAINT PK_users_course PRIMARY KEY (users_id,course_id);
+ALTER TABLE users_course ADD CONSTRAINT FK_users_course_0 FOREIGN KEY (users_id) REFERENCES users (users_id) ON DELETE CASCADE;
+ALTER TABLE users_course ADD CONSTRAINT FK_users_course_1 FOREIGN KEY (course_id) REFERENCES course (course_id) ON DELETE CASCADE;
 
 CREATE TABLE booking_list(
-    list_id INT NOT NULL REFERENCES list(list_id),
-    booking_id INT NOT NULL REFERENCES booking(booking_id)
+    list_id INT NOT NULL REFERENCES list(list_id) ON DELETE CASCADE,
+    booking_id INT NOT NULL REFERENCES booking(booking_id) ON DELETE CASCADE
 );
 
 ALTER TABLE booking_list ADD CONSTRAINT PK_booking_list PRIMARY KEY (list_id,booking_id);
+ALTER TABLE booking_list ADD CONSTRAINT FK_booking_list_0 FOREIGN KEY (list_id) REFERENCES list (list_id) ON DELETE CASCADE;
+ALTER TABLE booking_list ADD CONSTRAINT FK_booking_list_1 FOREIGN KEY (booking_id) REFERENCES booking (booking_id) ON DELETE CASCADE;
+
 
 -- Tre användare där beda med id 2 är admin.
 INSERT INTO users (usersname, password, admin) 
