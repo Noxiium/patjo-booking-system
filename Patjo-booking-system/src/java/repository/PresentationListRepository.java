@@ -60,4 +60,27 @@ public class PresentationListRepository {
         );
     }
 
+    /**
+     * Deletes bookings associated with the presentation list.
+     *
+     * @param selectedListId The ID of the presentation list 
+     */
+    public void deleteAssociatedBookings(int selectedListId) {
+        String query = "DELETE FROM PATJODB.BOOKING "
+                + "WHERE booking_id IN ("
+                + "  SELECT booking_id FROM PATJODB.BOOKING_LIST WHERE list_id = ?"
+                + ")";
+        jdbcTemplate.update(query, selectedListId);
+    }
+
+    /**
+     * Deletes a presentation list from the database.
+     *
+     * @param selectedListId The ID of the presentation list to be deleted
+     */
+    public void deletePresentationListFromDB(int selectedListId) {
+        String query = "DELETE FROM PATJODB.LIST WHERE LIST_ID = ?";
+        jdbcTemplate.update(query, selectedListId);
+    }
+
 }
