@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import service.PresentationListService;
 
 @Controller
@@ -54,13 +55,14 @@ public class PresentationListController {
      * Handles the request to delete a selected presentation list.
      *
      * @param selectedListId The ID of the presentation list to be deleted.
-     * @param model          The model to add attributes for the view.
+     * @param redirectAttributes
      * @return 
      */
      @RequestMapping("/deleteselectedlist")
-    public String deletePresentationList(@RequestParam("selectedList") int selectedListId, Model model) {
+    public String deletePresentationList(@RequestParam("selectedList") int selectedListId, RedirectAttributes redirectAttributes) {
         presentationListService.deleteSelectedPresentationList(selectedListId);
-        return "presentationListView";
+         redirectAttributes.addFlashAttribute("deletedlist", "deletedlist");
+        return "redirect:/presentationlist";
     }
     
 }
