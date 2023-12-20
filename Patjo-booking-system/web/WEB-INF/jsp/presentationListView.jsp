@@ -6,7 +6,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Patjo Booking System</title>
-
+        <style>
+            .deleted-container {
+                background-color: lightcoral;
+                padding: 8px;
+            }
+        </style>
         <script>
             function toMainView() {
                 window.location.href = '/Patjo-booking-system/adminmain';
@@ -51,7 +56,14 @@
     </head>
     <body>
         <h1>Presentation Lists</h1>
+        <c:if test="${not empty deletedlist}">
+            <div class="deleted-container">
+                <p>List Deleted: The chosen presentation list has been removed successfully.</p>
+                <p>All related bookings have been eliminated.</p>
 
+            </div>
+            <br>
+        </c:if>
         <c:choose>
             <c:when test="${not empty selectedPresentationList}">
                 <h3>List number: ${listId}</h3>
