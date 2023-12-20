@@ -49,4 +49,18 @@ public class PresentationListController {
         model.addAttribute("listId", selectedListId);
         return "presentationListView";
     }
+    
+      /**
+     * Handles the request to delete a selected presentation list.
+     *
+     * @param selectedListId The ID of the presentation list to be deleted.
+     * @param model          The model to add attributes for the view.
+     * @return 
+     */
+     @RequestMapping("/deleteselectedlist")
+    public String deletePresentationList(@RequestParam("selectedList") int selectedListId, Model model) {
+        presentationListService.deleteSelectedPresentationList(selectedListId);
+        return "presentationListView";
+    }
+    
 }
