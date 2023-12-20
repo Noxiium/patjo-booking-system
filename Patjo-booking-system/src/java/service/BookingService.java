@@ -7,6 +7,7 @@ import model.BookingDTO;
 import model.CourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import repository.BookingRepository;
 
 /**
@@ -58,6 +59,7 @@ public class BookingService {
      * @param selectedTimeSlot The selected time slot to be booked.
      * @param session The HttpSession containing user information.
      */
+    @Transactional
     public void saveBookedTime(String selectedTimeSlot, HttpSession session) {
 
         // Retrieve the userId from the current session
@@ -86,6 +88,7 @@ public class BookingService {
      * @param selectedTimeSlot The ID of the selected time slot to be removed.
      * @param session The HttpSession containing user information.
      */
+    @Transactional
     public void removeBookedTimeSlot(String selectedTimeSlot, HttpSession session) {
         Integer selectedTimeSlotId = Integer.valueOf(selectedTimeSlot);
         Integer userId = (Integer) session.getAttribute("userId");

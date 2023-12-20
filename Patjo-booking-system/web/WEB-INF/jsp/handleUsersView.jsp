@@ -153,9 +153,6 @@
             }
             function confirmDelete() {
                 var confirmation = confirm('Are you sure you want to delete the selected user(s)?');
-                var left = (window.innerWidth - 400) / 2; // Justera bredden av popuprutan här
-                var top = (window.innerHeight - 200) / 2; // Justera höjden av popuprutan här
-                window.moveTo(left, top);
                 return confirmation;
             }
 

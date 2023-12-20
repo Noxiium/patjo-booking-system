@@ -5,6 +5,7 @@ import model.BookingDTO;
 import model.PresentationListDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import repository.PresentationListRepository;
 
 /**
@@ -41,6 +42,17 @@ public class PresentationListService {
      */
     public List<BookingDTO> fetchSelectedPresentationList(int selectedListId) {
         return presentationListRepository.fetchSelectedPresentationListFromDB(selectedListId);
+    }
+
+    /**
+     * Deletes the selected presentation list along with its associated bookings.
+     *
+     * @param selectedListId The ID of the presentation list to be deleted.
+     */
+    @Transactional
+    public void deleteSelectedPresentationList(int selectedListId) {
+       presentationListRepository.deleteAssociatedBookings(selectedListId);
+       presentationListRepository.deletePresentationListFromDB(selectedListId);
     }
 
 }

@@ -19,6 +19,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public void saveUser(User user) {
         userRepository.saveUser(user);
     }
@@ -90,11 +91,12 @@ public class UserService {
 
     /**
      * Removes the selected user(s) and their associated bookings. If a user has
-     * associated bookings, it calls the method clearAndRemoveAssociatedBookings
-     * to set the bookings to available and remove them.
+     * associated bookings, it calls the method updateAssociatedBookingsAvailability
+     * to set the bookings to available.
      *
      * @param selectedUserIds Array of user IDs to be removed.
      */
+    @Transactional
     public void removeUserAndAssociatedBookings(String[] selectedUserIds) {
 
         for (String id : selectedUserIds) {
@@ -102,24 +104,22 @@ public class UserService {
             List<Integer> bookingIds = userRepository.checkAssociatedBookings(userId);
 
             if (!bookingIds.isEmpty()) {
-                clearAndRemoveAssociatedBookings(bookingIds, userId);
+                updateAssociatedBookingsAvailability(bookingIds);
             }
             userRepository.removeUserFromDB(userId);
         }
     }
 
     /**
-     * Sets a given users associated bookings to available, and removes them.
+     * Sets a given users associated bookings to available.
      *
      * @param bookingIds List of booking IDs associated with the user.
-     * @param userId ID of the user whose bookings are being cleared and
-     * removed.
      */
-    private void clearAndRemoveAssociatedBookings(List<Integer> bookingIds, Integer userId) {
+    @Transactional
+    private void updateAssociatedBookingsAvailability(List<Integer> bookingIds) {
 
         for (Integer bookingId : bookingIds) {
             userRepository.markAssociatedBookingsAsAvailable(bookingId);
-            userRepository.removeAssociatedBookings(bookingId, userId);
         }
     }
 }
