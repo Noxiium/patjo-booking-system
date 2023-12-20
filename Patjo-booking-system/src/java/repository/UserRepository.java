@@ -85,17 +85,6 @@ public class UserRepository {
     }
 
     /**
-     * Removes the association between a user and a booking from the database.
-     *
-     * @param bookingId ID of the booking to be removed.
-     * @param userId ID of the user to be removed.
-     */
-    public void removeAssociatedBookings(Integer bookingId, Integer userId) {
-        String query = "DELETE FROM PATJODB.USERS_BOOKING WHERE USERS_ID = ? AND BOOKING_ID = ?";
-        jdbcTemplate.update(query, userId, bookingId);
-    }
-
-    /**
      * Removes a user from the database.
      *
      * @param userId ID of the user to be removed.
