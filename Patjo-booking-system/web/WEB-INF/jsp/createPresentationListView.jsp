@@ -12,7 +12,7 @@
 
         <h1>Create Presentation List</h1>
 
-        <form id="bookingForm" action="savebooking" method="post" onsubmit="return validateForm()">
+        <form id="bookingForm" action="savepresentationlist" method="post" onsubmit="return validateForm()">
             <select id="courseId" name="courseId" required>
                 <option value="" disabled selected>Select a course</option>
                 <c:forEach var="course" items="${courseList}">
