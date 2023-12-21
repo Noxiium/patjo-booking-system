@@ -2,8 +2,10 @@ package repository;
 
 import java.util.List;
 import model.BookingDTO;
+import model.CourseDTO;
 import model.PresentationListDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -63,7 +65,7 @@ public class PresentationListRepository {
     /**
      * Deletes bookings associated with the presentation list.
      *
-     * @param selectedListId The ID of the presentation list 
+     * @param selectedListId The ID of the presentation list
      */
     public void deleteAssociatedBookings(int selectedListId) {
         String query = "DELETE FROM PATJODB.BOOKING "
@@ -81,6 +83,12 @@ public class PresentationListRepository {
     public void deletePresentationListFromDB(int selectedListId) {
         String query = "DELETE FROM PATJODB.LIST WHERE LIST_ID = ?";
         jdbcTemplate.update(query, selectedListId);
+    }
+
+    public List<CourseDTO> fetchAvailableCoursesFromDB() {
+        String query = "SELECT COURSE_ID,COURSE_NAME FROM PATJODB.COURSE";
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(CourseDTO.class));
+
     }
 
 }

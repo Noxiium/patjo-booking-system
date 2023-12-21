@@ -2,6 +2,7 @@ package service;
 
 import java.util.List;
 import model.BookingDTO;
+import model.CourseDTO;
 import model.PresentationListDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,11 @@ public class PresentationListService {
     public void deleteSelectedPresentationList(int selectedListId) {
        presentationListRepository.deleteAssociatedBookings(selectedListId);
        presentationListRepository.deletePresentationListFromDB(selectedListId);
+    }
+
+    public List<CourseDTO> fetchAvailableCourses() {
+      List<CourseDTO> availableCourses = presentationListRepository.fetchAvailableCoursesFromDB();
+      return availableCourses;
     }
 
 }
