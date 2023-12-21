@@ -2,6 +2,7 @@ package controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import model.BookingDTO;
 import model.CourseDTO;
 import model.PresentationListDTO;
@@ -74,18 +75,45 @@ public class PresentationListController {
         return "createPresentationListView";
     }
 
-    @RequestMapping("/presentationlist/savebooking")
-    public String saveBooking(@RequestParam("typeOfSession") List<String> typeOfSession,
+    /**
+     * Handles the HTTP POST request to save a created presentation list.
+     *
+     * @param typeOfSession List of strings representing the types of sessions
+     * in the presentation list.
+     * @param location List of strings representing the locations associated
+     * with each session.
+     * @param startTime List of strings representing the start times for each
+     * session.
+     * @param courseId String representing the ID of the course for which the
+     * presentation list is created.
+     * @param session HttpSession object containing user-related information.
+     * @return
+     */
+    @RequestMapping("/presentationlist/savepresentationlist")
+    public String savePresentationList(@RequestParam("typeOfSession") List<String> typeOfSession,
             @RequestParam("location") List<String> location,
             @RequestParam("startTime") List<String> startTime,
-            @RequestParam("courseId") String courseId) {
+            @RequestParam("courseId") String courseId,
+            HttpSession session) {
 
         System.out.println("Selected Course Id:" + courseId);
         List<BookingDTO> bookingDTOList = buildBookingDTOList(typeOfSession, location, startTime);
-
+        presentationListService.saveCreatedPresentationList(bookingDTOList, session, Integer.valueOf(courseId));
         return "redirect:/adminmain";
     }
 
+    /**
+     * Builds a list of BookingDTO objects based on input lists for
+     * typeOfSession, location, and startTime.
+     *
+     * @param typeOfSession List of strings representing the types of sessions.
+     * @param location List of strings representing the locations associated
+     * with each session.
+     * @param startTime List of strings representing the start times for each
+     * session.
+     * @return A List of BookingDTO objects representing the booking information
+     * for each session.
+     */
     private List<BookingDTO> buildBookingDTOList(List<String> typeOfSession, List<String> location, List<String> startTime) {
 
         List<BookingDTO> bookingDTOList = new ArrayList<>();
@@ -98,16 +126,6 @@ public class PresentationListController {
             bookingDTO.setIsAvailable(true);
 
             bookingDTOList.add(bookingDTO);
-        }
-        
-        
-        for (BookingDTO bookingDTO : bookingDTOList) {
-            System.out.println("Type of Session: " + bookingDTO.getTypeOfSession());
-            System.out.println("Location: " + bookingDTO.getLocation());
-            System.out.println("Start Time: " + bookingDTO.getStartTime());
-            System.out.println("Is Available: " + bookingDTO.getIsAvailable());
-            System.out.println("--------------------------------");
-
         }
         return bookingDTOList;
     }

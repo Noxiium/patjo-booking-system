@@ -1,6 +1,8 @@
 package service;
 
+import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import model.BookingDTO;
 import model.CourseDTO;
 import model.PresentationListDTO;
@@ -46,19 +48,61 @@ public class PresentationListService {
     }
 
     /**
-     * Deletes the selected presentation list along with its associated bookings.
+     * Deletes the selected presentation list along with its associated
+     * bookings.
      *
      * @param selectedListId The ID of the presentation list to be deleted.
      */
     @Transactional
     public void deleteSelectedPresentationList(int selectedListId) {
-       presentationListRepository.deleteAssociatedBookings(selectedListId);
-       presentationListRepository.deletePresentationListFromDB(selectedListId);
+        presentationListRepository.deleteAssociatedBookings(selectedListId);
+        presentationListRepository.deletePresentationListFromDB(selectedListId);
     }
 
+    /**
+     * Retrieves a list of available courses for creating Presentation Lists.
+     *
+     * @return A List of CourseDTO representing the available courses.
+     */
     public List<CourseDTO> fetchAvailableCourses() {
-      List<CourseDTO> availableCourses = presentationListRepository.fetchAvailableCoursesFromDB();
-      return availableCourses;
+        List<CourseDTO> availableCourses = presentationListRepository.fetchAvailableCoursesFromDB();
+        return availableCourses;
     }
 
+    /**
+     * Saves the created presentation list along with associated bookings in the
+     * database.
+     *
+     * @param bookingDTOList List of BookingDTO objects representing the created
+     * Presentation List.
+     * @param session HttpSession object containing user-related information.
+     * @param courseId Integer representing the ID of the course for which the
+     * presentation list is created.
+     */
+    public void saveCreatedPresentationList(List<BookingDTO> bookingDTOList, HttpSession session, Integer courseId) {
+        Integer userId = (Integer) session.getAttribute("userId");
+
+        int listId = presentationListRepository.saveListInDBReturnListId(userId, courseId);
+        List<Integer> bookingIds = saveAssociatedBookings(bookingDTOList);
+        presentationListRepository.updateBookingListReferenceTable(listId, bookingIds);
+    }
+
+    /**
+     * Saves a list of associated bookings in the database and returns a list of
+     * generated booking IDs.
+     *
+     * @param bookingDTOList List of BookingDTO objects representing bookings to
+     * be saved.
+     * @return List of Integer representing the generated booking IDs.
+     */
+    private List<Integer> saveAssociatedBookings(List<BookingDTO> bookingDTOList) {
+        List<Integer> bookingIds = new ArrayList<>();
+
+        for (BookingDTO booking : bookingDTOList) {
+            int id = presentationListRepository.saveAssociatedBookingsInDB(booking);
+            bookingIds.add(id);
+        }
+        return bookingIds;
+
+    }
 }

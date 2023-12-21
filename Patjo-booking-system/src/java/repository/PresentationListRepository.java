@@ -1,12 +1,15 @@
 package repository;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import model.BookingDTO;
 import model.CourseDTO;
 import model.PresentationListDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -91,4 +94,67 @@ public class PresentationListRepository {
 
     }
 
+    /**
+     * Saves a new list in the database and returns the generated list ID.
+     *
+     * @param userId The ID of the creator of the list
+     * @param courseId The ID of the course associated with the list.
+     * @return The generated list ID.
+     */
+    public int saveListInDBReturnListId(Integer userId, Integer courseId) {
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("PATJODB.LIST")
+                .usingGeneratedKeyColumns("LIST_ID")
+                .usingColumns("USERS_ID", "COURSE_ID");
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("USERS_ID", userId);
+        parameters.put("COURSE_ID", courseId);
+
+        Number generatedId = -1;
+
+        generatedId = simpleJdbcInsert.executeAndReturnKey(parameters);
+
+        return generatedId.intValue();
+    }
+
+    /**
+     * Saves a new booking in the database and returns the generated booking ID.
+     *
+     * @param bookingDTO The BookingDTO containing booking information.
+     * @return The generated booking ID.
+     */
+    public int saveAssociatedBookingsInDB(BookingDTO bookingDTO) {
+        SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate)
+                .withTableName("PATJODB.BOOKING")
+                .usingGeneratedKeyColumns("BOOKING_ID")
+                .usingColumns("BOOKING_TYPE_OF_SESSION", "BOOKING_LOCATION", "START_TIME", "AVAILABLE");
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("BOOKING_TYPE_OF_SESSION", bookingDTO.getTypeOfSession());
+        parameters.put("BOOKING_LOCATION", bookingDTO.getLocation());
+        parameters.put("START_TIME", bookingDTO.getStartTime());
+        parameters.put("AVAILABLE", bookingDTO.getIsAvailable());
+
+        Number generatedId = -1;
+
+        generatedId = simpleJdbcInsert.executeAndReturnKey(parameters);
+
+        return generatedId.intValue();
+    }
+
+    /**
+     * Updates the reference table linking a list to bookings in the
+     * database.
+     *
+     * @param listId The ID of the list to be associated with bookings.
+     * @param bookingIds A List of booking IDs 
+     */
+    public void updateBookingListReferenceTable(int listId, List<Integer> bookingIds) {
+
+        for (Integer id : bookingIds) {
+            String query = "INSERT INTO PATJODB.BOOKING_LIST(LIST_ID,BOOKING_ID)VALUES (?,?)";
+            jdbcTemplate.update(query, listId, id);
+        }
+    }
 }
