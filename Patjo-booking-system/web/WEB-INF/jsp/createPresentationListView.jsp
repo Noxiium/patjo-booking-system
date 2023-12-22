@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="header.jsp" %> 
-<%@ include file="adminSidebar.jsp" %> 
+<%@ include file="sidebar.jsp" %> 
 
 <!DOCTYPE html>
 <html>
@@ -18,11 +18,25 @@
                 margin-left: 200px;
 
             }
+            .button {
+                padding: 8px 16px;
+                font-size: 14px;
+                cursor: pointer;
+                background-color: #f5f5f5;
+                color: #333;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                transition: background-color 0.3s ease;
+            }
+
+            .button:hover {
+                background-color: #e0e0e0;
+            }
         </style>
     </head>
     <body>
 
-        
+
         <div class="main">
             <h1>Create Presentation List</h1>
             <form id="bookingForm" action="savepresentationlist" method="post" onsubmit="return validateForm()">
@@ -37,8 +51,8 @@
                 <br>
                 <div id="bookingRows"></div>
 
-                <button type="button" onclick="addRow()">Add Row</button>
-                <input type="submit" value="Submit">
+                <button type="button" onclick="addRow()" class="button">Add Row</button>
+                <input type="submit" value="Submit" class="button">
             </form>
         </div>
         <script>
@@ -46,7 +60,7 @@
                 addRow();
             };
 
-            function validateForm() {
+            function validateForm() { 
                 var courseId = document.getElementById("courseId").value;
 
                 if (courseId === "") {

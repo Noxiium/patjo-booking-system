@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="header.jsp" %>
-<%@ include file="adminSidebar.jsp" %> 
+<%@ include file="sidebar.jsp" %> 
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,6 +15,20 @@
             .main {
                 margin-left: 200px;
 
+            }
+            .button {
+                padding: 8px 16px;
+                font-size: 14px;
+                cursor: pointer;
+                background-color: #f5f5f5;
+                color: #333;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                transition: background-color 0.3s ease;
+            }
+
+            .button:hover {
+                background-color: #e0e0e0;
             }
 
         </style>
@@ -62,7 +76,7 @@
                         </tbody>
                     </table>
                     <br>
-                    <input type="button" value="Back" onclick="toPresentationList()">
+                    <input type="button" value="Back" onclick="toPresentationList()" class="button">
                 </c:when>
 
                 <c:otherwise>
@@ -92,13 +106,13 @@
                             </tbody>
                         </table>
                         <br>
-                        <input type="submit" value="Show List">
+                        <input type="submit" value="Show List" class="button">
                     </form>
 
 
                     <form id="deleteForm" action="deleteselectedlist" method="post" onsubmit="return deleteList()">
                         <input type="hidden" name="selectedList" id="listIdToDelete" value="">
-                        <input type="submit" value="Delete List">
+                        <input type="submit" value="Delete List" class="button">
                     </form>
                 </c:otherwise>
             </c:choose>
@@ -106,7 +120,7 @@
     </body>
 
     <script>
-       function toPresentationList() {
+        function toPresentationList() {
             window.location.href = '/Patjo-booking-system/presentationlist';
         }
 

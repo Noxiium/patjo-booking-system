@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="header.jsp" %> 
-<%@ include file="adminSidebar.jsp" %> 
+<%@ include file="sidebar.jsp" %> 
 
 <!DOCTYPE html>
 <html>
@@ -34,6 +34,20 @@
                 background-color: lightcoral;
                 padding: 8px;
             }
+            .button {
+                padding: 8px 16px;
+                font-size: 14px;
+                cursor: pointer;
+                background-color: #f5f5f5;
+                color: #333;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                transition: background-color 0.3s ease;
+            }
+
+            .button:hover {
+                background-color: #e0e0e0;
+            }
         </style>
     </head>
     <body>
@@ -58,7 +72,7 @@
 
             <label for="isAdmin">Admin:</label>
             <input type="checkbox" id="isAdmin" name="isAdmin">
-            <input type="submit" value="Create new user">
+            <input type="submit" value="Create new user" class="button">
             <% if (request.getAttribute("errorMessage") != null) {%>
             <div class="error-message">
                 <%= request.getAttribute("errorMessage")%>
@@ -112,7 +126,7 @@
                     </table>
                 </div>
             </div>
-            <input id="deleteButton" type="submit" value="Delete selected users" style="margin-top: 10px;">
+            <input id="deleteButton" type="submit" value="Delete selected users" style="margin-top: 10px;" class="button">
         </form>
         
          </div>
