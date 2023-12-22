@@ -1,33 +1,46 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="header.jsp" %> 
+<%@ include file="adminSidebar.jsp" %> 
 
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Patjo Booking System</title>
+        <style>
+            body {
+                font-family: "serif";
+                background-color: #ffffff;
+                color: #000000;
+            }
+            .main {
+                margin-left: 200px;
+
+            }
+        </style>
     </head>
     <body>
 
-        <h1>Create Presentation List</h1>
+        
+        <div class="main">
+            <h1>Create Presentation List</h1>
+            <form id="bookingForm" action="savepresentationlist" method="post" onsubmit="return validateForm()">
+                <select id="courseId" name="courseId" required>
+                    <option value="" disabled selected>Select a course</option>
+                    <c:forEach var="course" items="${courseList}">
+                        <option value="${course.courseId}">${course.courseName}</option>
+                    </c:forEach>
+                </select>
 
-        <form id="bookingForm" action="savepresentationlist" method="post" onsubmit="return validateForm()">
-            <select id="courseId" name="courseId" required>
-                <option value="" disabled selected>Select a course</option>
-                <c:forEach var="course" items="${courseList}">
-                    <option value="${course.courseId}">${course.courseName}</option>
-                </c:forEach>
-            </select>
+                <br>
+                <br>
+                <div id="bookingRows"></div>
 
-            <br>
-            <br>
-            <div id="bookingRows"></div>
-
-            <button type="button" onclick="addRow()">Add Row</button>
-            <input type="submit" value="Submit">
-        </form>
-
+                <button type="button" onclick="addRow()">Add Row</button>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
         <script>
             window.onload = function () {
                 addRow();
@@ -35,7 +48,7 @@
 
             function validateForm() {
                 var courseId = document.getElementById("courseId").value;
-          
+
                 if (courseId === "") {
                     alert("Please select a course before submitting the form.");
                     return false;
@@ -74,4 +87,5 @@
         </script>
 
     </body>
+
 </html>

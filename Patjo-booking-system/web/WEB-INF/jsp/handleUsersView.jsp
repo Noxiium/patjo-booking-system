@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="header.jsp" %> 
+<%@ include file="adminSidebar.jsp" %> 
 
 <!DOCTYPE html>
 <html>
@@ -8,6 +9,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Patjo Booking System</title>
         <style>
+              body {
+                font-family: "serif";
+                background-color: #ffffff;
+                color: #000000;
+            }
+            .main {
+                margin-left: 200px;
+
+            }
             .table-container {
                 display: flex;
             }
@@ -27,6 +37,7 @@
         </style>
     </head>
     <body>
+         <div class="main">
         <h1>Admin Handle User Page</h1>
         <hr style="margin-top: 20px; margin-bottom: 20px;">
         <c:if test="${not empty deleteduser}">
@@ -102,18 +113,14 @@
                 </div>
             </div>
             <input id="deleteButton" type="submit" value="Delete selected users" style="margin-top: 10px;">
-            <input type="button" value="Main view" onclick="toMainView()">
         </form>
         
-
+         </div>
         <script>
             function addUser() {
                 console.log('add user');
             }
-            function toMainView() {
-                window.location.href = '/Patjo-booking-system/adminmain';
-            }
-
+ 
             function deleteSelectedUsers() {
                 // Get selected users
                 const selectedUsers = document.querySelectorAll('input[name="selectedUsers"]:checked');
