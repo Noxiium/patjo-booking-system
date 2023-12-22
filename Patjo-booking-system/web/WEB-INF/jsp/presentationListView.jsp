@@ -30,6 +30,10 @@
             .button:hover {
                 background-color: #e0e0e0;
             }
+            .form-container {
+                display: flex;
+                gap: 8px; 
+            }
 
         </style>
     </head>
@@ -80,40 +84,44 @@
                 </c:when>
 
                 <c:otherwise>
-                    <form id="showListForm" action="showpresentationlist" method="get" onsubmit="return validateForm()">
-                        <table border="1">
-                            <thead>
+
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Choose</th>
+                                <th>List ID</th>
+                                <th>Course</th>
+                                <th>Creator</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="list" items="${activePresentationLists}">
                                 <tr>
-                                    <th>Choose</th>
-                                    <th>List ID</th>
-                                    <th>Course</th>
-                                    <th>Creator</th>
+                                    <td>
+                                        <label>
+                                            <input type="radio" name="selectedList" value="${list.listId}">
+                                        </label>
+                                    </td>
+                                    <td>${list.listId}</td>
+                                    <td>${list.courseName}</td>
+                                    <td>${list.creatorName}</td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <c:forEach var="list" items="${activePresentationLists}">
-                                    <tr>
-                                        <td>
-                                            <label>
-                                                <input type="radio" name="selectedList" value="${list.listId}">
-                                            </label>
-                                        </td>
-                                        <td>${list.listId}</td>
-                                        <td>${list.courseName}</td>
-                                        <td>${list.creatorName}</td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
-                        </table>
-                        <br>
-                        <input type="submit" value="Show List" class="button">
-                    </form>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                    <br>
+                    <div class="form-container">
+
+                        <form id="showListForm" action="showpresentationlist" method="get" onsubmit="return validateForm()">
+                            <input type="submit" value="Show List" class="button">
+                        </form>
 
 
-                    <form id="deleteForm" action="deleteselectedlist" method="post" onsubmit="return deleteList()">
-                        <input type="hidden" name="selectedList" id="listIdToDelete" value="">
-                        <input type="submit" value="Delete List" class="button">
-                    </form>
+                        <form id="deleteForm" action="deleteselectedlist" method="post" onsubmit="return deleteList()">
+                            <input type="hidden" name="selectedList" id="listIdToDelete" value="">
+                            <input type="submit" value="Delete List" class="button">
+                        </form>
+                    </div>
                 </c:otherwise>
             </c:choose>
         </div>
