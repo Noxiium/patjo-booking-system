@@ -1,6 +1,8 @@
 package controller;
 
 import java.util.List;
+import model.BookingDTO;
+import model.PresentationListDTO;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -83,11 +85,29 @@ public class HandleUserController {
         redirectAttributes.addFlashAttribute("deleteduser", "deleteduser");
         return "redirect:/users/showusers";
     }
-    
-    @RequestMapping("/users/userbooking")
-    public String showUsersAndPresentationLists(){
-    
-    
-    return "userBookingView";
+
+    @RequestMapping("/users/managebooking")
+    public String showUsers(Model model) {
+        List<User> users = userService.getAllStudentUsers();
+        model.addAttribute("userList", users);
+
+        return "manageBookingView";
+    }
+
+    @RequestMapping("/users/showuserbooking")
+    public String manageUserBooking(@RequestParam("userId") Integer userId, 
+                                    @RequestParam("username") String userName, 
+                                    Model model) {
+        System.out.println("userid: " + userId);
+
+        List<BookingDTO> userBookings = userService.getUsersActiveBookings(userId);
+        List<PresentationListDTO> presentationLists = userService.getAllPresentationLists();
+
+        model.addAttribute("userBookings", userBookings);
+        model.addAttribute("presentationLists", presentationLists);
+        model.addAttribute("userName", userName);
+
+        return "userBookingView";
+
     }
 }

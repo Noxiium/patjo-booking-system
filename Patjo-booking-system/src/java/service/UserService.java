@@ -2,6 +2,8 @@ package service;
 
 import java.util.ArrayList;
 import java.util.List;
+import model.BookingDTO;
+import model.PresentationListDTO;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -91,8 +93,8 @@ public class UserService {
 
     /**
      * Removes the selected user(s) and their associated bookings. If a user has
-     * associated bookings, it calls the method updateAssociatedBookingsAvailability
-     * to set the bookings to available.
+     * associated bookings, it calls the method
+     * updateAssociatedBookingsAvailability to set the bookings to available.
      *
      * @param selectedUserIds Array of user IDs to be removed.
      */
@@ -121,5 +123,20 @@ public class UserService {
         for (Integer bookingId : bookingIds) {
             userRepository.markAssociatedBookingsAsAvailable(bookingId);
         }
+    }
+
+    public List<User> getAllStudentUsers() {
+        List<User> users = getAllUsers();
+         return getAllNonAdminUsersFromExistingList(users);
+      
+    }
+
+    public List<BookingDTO> getUsersActiveBookings(Integer userId) {
+        return userRepository.fetchUserBookingsFromDB(userId);
+
+    }
+
+    public List<PresentationListDTO> getAllPresentationLists() {
+        return userRepository.fetchAllPresentationListsFromDB();
     }
 }

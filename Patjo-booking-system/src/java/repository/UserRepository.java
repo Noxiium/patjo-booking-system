@@ -1,6 +1,8 @@
 package repository;
 
 import java.util.List;
+import model.BookingDTO;
+import model.PresentationListDTO;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -92,6 +94,46 @@ public class UserRepository {
     public void removeUserFromDB(Integer userId) {
         String query = "DELETE FROM PATJODB.USERS WHERE USERS_ID = ?";
         jdbcTemplate.update(query, userId);
+    }
+
+    /**
+     * Fetches the booked time slots for the current user from the database.
+     *
+     * @param userId, The ID for the current user
+     * @return A list of BookingDTO objects representing the user's bookings.
+     */
+    public List<BookingDTO> fetchUserBookingsFromDB(Integer userId) {
+        String query = "SELECT B.* FROM PATJODB.USERS_BOOKING UB JOIN PATJODB.BOOKING B ON UB.BOOKING_ID = B.BOOKING_ID WHERE UB.USERS_ID = ?";
+
+        return jdbcTemplate.query(query, (rs, rowNum)
+                -> new BookingDTO(
+                        rs.getInt("BOOKING_ID"),
+                        rs.getString("BOOKING_TYPE_OF_SESSION"),
+                        rs.getString("BOOKING_LOCATION"),
+                        rs.getString("START_TIME"),
+                        rs.getBoolean("AVAILABLE")
+                ), userId);
+    }
+
+    /**
+     * Fetches all presentation lists from the database.
+     *
+     * @return A list of PresentationListDTO representing all presentation
+     * lists.
+     */
+    public List<PresentationListDTO> fetchAllPresentationListsFromDB() {
+        String query = "SELECT L.LIST_ID, U.USERSNAME, C.COURSE_NAME "
+                + "FROM PATJODB.LIST AS L "
+                + "JOIN PATJODB.USERS AS U ON L.USERS_ID = U.USERS_ID "
+                + "JOIN PATJODB.COURSE AS C ON L.COURSE_ID = C.COURSE_ID";
+
+        return jdbcTemplate.query(query, (rs, rowNum)
+                -> new PresentationListDTO(
+                        rs.getInt("LIST_ID"),
+                        rs.getString("COURSE_NAME"),
+                        rs.getString("USERSNAME")
+                )
+        );
     }
 
 }
