@@ -46,7 +46,7 @@
                     <a href="/Patjo-booking-system/adminmain">Main Page</a>
                     <h3 class="text">- Users -</h3>
                     <a href="/Patjo-booking-system/users/showusers">Manage Users</a>
-                     <a href="/Patjo-booking-system/users/userbooking">Manage Bookings</a>
+                     <a href="/Patjo-booking-system/users/managebooking">Manage Bookings</a>
                       <h3 class="text">- Presentation Lists -</h3>
                     <a href="/Patjo-booking-system/presentationlist">See Active Lists</a>
                     <a href="/Patjo-booking-system/presentationlist/create">Create new List</a>
