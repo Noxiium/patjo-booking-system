@@ -3,7 +3,6 @@ package service;
 import java.util.ArrayList;
 import java.util.List;
 import model.BookingDTO;
-import model.PresentationListDTO;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -136,7 +135,7 @@ public class UserService {
 
     }
 
-    public List<PresentationListDTO> getAllPresentationLists() {
-        return userRepository.fetchAllPresentationListsFromDB();
+    public List<BookingDTO> getAvailableTimeSlots(Integer userId) {
+     return userRepository.getAvailableTimeSlotsFromDB(userId);   
     }
 }

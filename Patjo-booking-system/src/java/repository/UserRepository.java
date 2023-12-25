@@ -115,25 +115,24 @@ public class UserRepository {
                 ), userId);
     }
 
-    /**
-     * Fetches all presentation lists from the database.
-     *
-     * @return A list of PresentationListDTO representing all presentation
-     * lists.
-     */
-    public List<PresentationListDTO> fetchAllPresentationListsFromDB() {
-        String query = "SELECT L.LIST_ID, U.USERSNAME, C.COURSE_NAME "
-                + "FROM PATJODB.LIST AS L "
-                + "JOIN PATJODB.USERS AS U ON L.USERS_ID = U.USERS_ID "
-                + "JOIN PATJODB.COURSE AS C ON L.COURSE_ID = C.COURSE_ID";
+  
 
-        return jdbcTemplate.query(query, (rs, rowNum)
-                -> new PresentationListDTO(
-                        rs.getInt("LIST_ID"),
-                        rs.getString("COURSE_NAME"),
-                        rs.getString("USERSNAME")
-                )
-        );
+    public List<BookingDTO> getAvailableTimeSlotsFromDB(Integer userId) {
+               String query = "SELECT DISTINCT B.BOOKING_ID " +
+                       "FROM PATJODB.USERS_COURSE UC " +
+                       "JOIN PATJODB.LIST L ON UC.COURSE_ID = L.COURSE_ID " +
+                       "JOIN PATJODB.BOOKING_LIST BL ON L.LIST_ID = BL.LIST_ID " +
+                       "JOIN PATJODB.BOOKING B ON BL.BOOKING_ID = B.BOOKING_ID " +
+                       "WHERE UC.USERS_ID = ?";
+
+       return jdbcTemplate.query(query, (rs, rowNum)
+                -> new BookingDTO(
+                        rs.getInt("BOOKING_ID"),
+                        rs.getString("BOOKING_TYPE_OF_SESSION"),
+                        rs.getString("BOOKING_LOCATION"),
+                        rs.getString("START_TIME"),
+                        rs.getBoolean("AVAILABLE")
+                ), userId);
     }
 
 }

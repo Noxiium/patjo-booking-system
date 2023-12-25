@@ -98,6 +98,42 @@
                     <input type="submit" value="Delete booked time slot" class="button">
                 </c:if>
             </form>
+                 <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Choose</th>
+                                <th>Type of Session</th>
+                                <th>Location</th>
+                                <th>Time slot</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="booking" items="${bookingList}">
+                                <tr>
+                                    <td>
+                                        <label>
+                                            <input type="radio" name="selectedTimeSlot" value="${booking.id}" 
+                                                   ${not booking.isAvailable ? 'disabled' : ''} 
+                                                   class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                            <span class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                                ${booking.isAvailable ? '' : 'Full '}
+                                            </span>
+                                        </label>
+                                    </td>
+                                    <td class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                        ${booking.typeOfSession}
+                                    </td>
+                                    <td class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                        ${booking.location}
+                                    </td>
+                                    <td class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                        ${booking.startTime}
+                                    </td>
+                                </tr>
+
+                            </c:forEach>
+                        </tbody>
+                    </table>
         </div>
     </body>
     <script>
