@@ -83,4 +83,11 @@ public class HandleUserController {
         redirectAttributes.addFlashAttribute("deleteduser", "deleteduser");
         return "redirect:/users/showusers";
     }
+    
+    @RequestMapping("/users/userbooking")
+    public String showUsersAndPresentationLists(){
+    
+    
+    return "userBookingView";
+    }
 }

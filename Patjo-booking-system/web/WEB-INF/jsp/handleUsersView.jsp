@@ -81,7 +81,7 @@
         </form>
 
         <hr style="margin-top: 20px; margin-bottom: 20px;">
-
+        <div>
         <form id="selectUsersForm" method="post" action="removeUsers" onsubmit="return validateForm()">
             <h2> Select and remove users: </h2>
             <div class="table-container">
@@ -128,7 +128,7 @@
             </div>
             <input id="deleteButton" type="submit" value="Delete selected users" style="margin-top: 10px;" class="button">
         </form>
-        
+        </div>
          </div>
         <script>
             function addUser() {

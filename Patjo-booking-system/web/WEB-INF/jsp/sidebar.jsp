@@ -15,6 +15,12 @@
                 left: 0;
                 overflow-x: hidden;
                 padding-top: 20px;
+                color: #FFFFFF;
+             
+            }
+            .text{
+                text-align: center;
+                 opacity: 0.9;
             }
 
             .sidebar a {
@@ -38,8 +44,11 @@
             <c:choose>
                 <c:when test="${sessionScope.role eq 'Admin'}">
                     <a href="/Patjo-booking-system/adminmain">Main Page</a>
-                    <a href="/Patjo-booking-system/users/showusers">Handle Users</a>
-                    <a href="/Patjo-booking-system/presentationlist">See Lists</a>
+                    <h3 class="text">- Users -</h3>
+                    <a href="/Patjo-booking-system/users/showusers">Manage Users</a>
+                     <a href="/Patjo-booking-system/users/userbooking">Manage Bookings</a>
+                      <h3 class="text">- Presentation Lists -</h3>
+                    <a href="/Patjo-booking-system/presentationlist">See Active Lists</a>
                     <a href="/Patjo-booking-system/presentationlist/create">Create new List</a>
                 </c:when>
                 <c:otherwise>
