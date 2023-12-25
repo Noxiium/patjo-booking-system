@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ include file="header.jsp" %> 
+<%@ include file="sidebar.jsp" %> 
 
 <!DOCTYPE html>
 <html>
@@ -8,6 +9,15 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Patjo Booking System</title>
         <style>
+              body {
+                font-family: "serif";
+                background-color: #ffffff;
+                color: #000000;
+            }
+            .main {
+                margin-left: 200px;
+
+            }
             .table-container {
                 display: flex;
             }
@@ -24,9 +34,24 @@
                 background-color: lightcoral;
                 padding: 8px;
             }
+            .button {
+                padding: 8px 16px;
+                font-size: 14px;
+                cursor: pointer;
+                background-color: #f5f5f5;
+                color: #333;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                transition: background-color 0.3s ease;
+            }
+
+            .button:hover {
+                background-color: #e0e0e0;
+            }
         </style>
     </head>
     <body>
+         <div class="main">
         <h1>Admin Handle User Page</h1>
         <hr style="margin-top: 20px; margin-bottom: 20px;">
         <c:if test="${not empty deleteduser}">
@@ -47,7 +72,7 @@
 
             <label for="isAdmin">Admin:</label>
             <input type="checkbox" id="isAdmin" name="isAdmin">
-            <input type="submit" value="Create new user">
+            <input type="submit" value="Create new user" class="button">
             <% if (request.getAttribute("errorMessage") != null) {%>
             <div class="error-message">
                 <%= request.getAttribute("errorMessage")%>
@@ -56,7 +81,7 @@
         </form>
 
         <hr style="margin-top: 20px; margin-bottom: 20px;">
-
+        <div>
         <form id="selectUsersForm" method="post" action="removeUsers" onsubmit="return validateForm()">
             <h2> Select and remove users: </h2>
             <div class="table-container">
@@ -101,19 +126,15 @@
                     </table>
                 </div>
             </div>
-            <input id="deleteButton" type="submit" value="Delete selected users" style="margin-top: 10px;">
-            <input type="button" value="Main view" onclick="toMainView()">
+            <input id="deleteButton" type="submit" value="Delete selected users" style="margin-top: 10px;" class="button">
         </form>
-        
-
+        </div>
+         </div>
         <script>
             function addUser() {
                 console.log('add user');
             }
-            function toMainView() {
-                window.location.href = '/Patjo-booking-system/adminmain';
-            }
-
+ 
             function deleteSelectedUsers() {
                 // Get selected users
                 const selectedUsers = document.querySelectorAll('input[name="selectedUsers"]:checked');
