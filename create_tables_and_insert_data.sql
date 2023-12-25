@@ -28,7 +28,7 @@ CREATE TABLE booking(
 	booking_id INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
 	booking_type_of_session VARCHAR(64) NOT NULL, -- en sträng som beskriver bokningarna, t ex "labbar"
 	booking_location VARCHAR(16) NOT NULL, -- Sal på campus eller via zoom.
-	start_time TIMESTAMP NOT NULL, -- Vilket datum och tidpunkt redovisningarna börjar 
+	start_time VARCHAR(19) NOT NULL, -- Vilket datum och tidpunkt redovisningarna börjar 
 	available BOOLEAN  
 );
 
@@ -102,10 +102,10 @@ VALUES
 -- insert bookings
 INSERT INTO booking(booking_type_of_session, booking_location, start_time, available) 
 VALUES 
-('lab', 'zoom', TIMESTAMP('2023-12-23 10:15:00.00'), FALSE),
-('lab', 'zoom', TIMESTAMP('2023-12-23 10:30:00.00'), TRUE),
-('presentation', 'Room 203', TIMESTAMP('2024-01-19 10:15:00.00'), TRUE),
-('presentation', 'Room 203', TIMESTAMP('2023-01-18 10:30:00.00'), TRUE);
+('lab', 'zoom', '2023-12-23 10:15', FALSE),
+('lab', 'zoom', '2023-12-23 10:30', TRUE),
+('presentation', 'Room 203', '2024-01-19 10:15', TRUE),
+('presentation', 'Room 203', '2023-01-18 10:30', TRUE);
 
 
 -- cross reference the added bookings with the list
