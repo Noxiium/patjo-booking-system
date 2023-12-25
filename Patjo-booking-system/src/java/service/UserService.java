@@ -136,6 +136,7 @@ public class UserService {
     }
 
     public List<BookingDTO> getAvailableTimeSlots(Integer userId) {
-     return userRepository.getAvailableTimeSlotsFromDB(userId);   
+     return  userRepository.getAvailableTimeSlotsFromDB(userId);  
+
     }
 }

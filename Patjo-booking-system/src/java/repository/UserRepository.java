@@ -115,23 +115,23 @@ public class UserRepository {
                 ), userId);
     }
 
-  
-
     public List<BookingDTO> getAvailableTimeSlotsFromDB(Integer userId) {
-               String query = "SELECT DISTINCT B.BOOKING_ID " +
-                       "FROM PATJODB.USERS_COURSE UC " +
-                       "JOIN PATJODB.LIST L ON UC.COURSE_ID = L.COURSE_ID " +
-                       "JOIN PATJODB.BOOKING_LIST BL ON L.LIST_ID = BL.LIST_ID " +
-                       "JOIN PATJODB.BOOKING B ON BL.BOOKING_ID = B.BOOKING_ID " +
-                       "WHERE UC.USERS_ID = ?";
+        String query = "SELECT B.*, C.COURSE_NAME "
+                + "FROM PATJODB.USERS_COURSE UC "
+                + "JOIN PATJODB.LIST L ON UC.COURSE_ID = L.COURSE_ID "
+                + "JOIN PATJODB.BOOKING_LIST BL ON L.LIST_ID = BL.LIST_ID "
+                + "JOIN PATJODB.BOOKING B ON BL.BOOKING_ID = B.BOOKING_ID "
+                + "JOIN PATJODB.COURSE C ON L.COURSE_ID = C.COURSE_ID "
+                + "WHERE UC.USERS_ID = ?";
 
-       return jdbcTemplate.query(query, (rs, rowNum)
+        return jdbcTemplate.query(query, (rs, rowNum)
                 -> new BookingDTO(
                         rs.getInt("BOOKING_ID"),
                         rs.getString("BOOKING_TYPE_OF_SESSION"),
                         rs.getString("BOOKING_LOCATION"),
                         rs.getString("START_TIME"),
-                        rs.getBoolean("AVAILABLE")
+                        rs.getBoolean("AVAILABLE"),
+                        rs.getString("COURSE_NAME") 
                 ), userId);
     }
 

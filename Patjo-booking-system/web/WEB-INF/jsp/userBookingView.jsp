@@ -47,6 +47,10 @@
             .button:hover {
                 background-color: #e0e0e0;
             }
+             .disabled-label {
+                color: #808080;
+                font-weight: lighter;
+            }
             </style>
     </head>
     <body>
@@ -105,6 +109,7 @@
                                 <th>Type of Session</th>
                                 <th>Location</th>
                                 <th>Time slot</th>
+                                <th>Course</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -128,6 +133,9 @@
                                     </td>
                                     <td class="${not booking.isAvailable ? 'disabled-label' : ''}">
                                         ${booking.startTime}
+                                    </td>
+                                    <td class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                        ${booking.courseName}
                                     </td>
                                 </tr>
 
