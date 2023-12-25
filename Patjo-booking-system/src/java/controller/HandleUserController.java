@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -106,8 +107,24 @@ public class HandleUserController {
         model.addAttribute("userBookings", userBookings);
         model.addAttribute("bookingList", bookingList);
         model.addAttribute("userName", userName);
+        model.addAttribute("userId", userId);
 
         return "userBookingView";
 
+    }
+    
+    @RequestMapping("/users/deletetimeslot")
+    public String deleteUserTimeSlot(@RequestParam("userId") Integer userId,
+                                    @RequestParam("userName") String userName,
+                                    @RequestParam("selectedTimeSlot") Integer timeSlotId, Model model){
+        
+        System.out.println(userId);
+        System.out.println(userName);
+        System.out.println(timeSlotId);
+        
+        model.addAttribute("username", userName);
+        model.addAttribute("userId", userId);
+        return "redirect:/users/showuserbooking";
+    
     }
 }
