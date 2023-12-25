@@ -15,7 +15,7 @@ public class BookingDTO implements Serializable {
     private String location;
     private String startTime;
     private Boolean isAvailable;
-
+    private String courseName;
 
 
     public BookingDTO(int id, String typeOfSession, String location, String startTime, Boolean isAvailable) {
@@ -24,6 +24,14 @@ public class BookingDTO implements Serializable {
         this.location = location;
         this.startTime = startTime;
         this.isAvailable = isAvailable;
+    }
+      public BookingDTO(int id, String typeOfSession, String location, String startTime, Boolean isAvailable, String courseName) {
+        this.id = id;
+        this.typeOfSession = typeOfSession;
+        this.location = location;
+        this.startTime = startTime;
+        this.isAvailable = isAvailable;
+        this.courseName = courseName;
     }
 
     public BookingDTO() {
@@ -70,5 +78,13 @@ public class BookingDTO implements Serializable {
     public void setId(int id) {
         this.id = id;
     }
+      public String getCourseName() {
+        return courseName;
+    }
+
+    public void setCourseName(String courseName) {
+        this.courseName = courseName;
+    }
+
 
 }

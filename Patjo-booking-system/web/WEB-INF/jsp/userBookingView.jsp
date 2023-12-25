@@ -10,61 +10,64 @@
         <title>Patjo Booking System</title>
 
         <style>
-            body {
-                font-family: "serif";
-                background-color: #ffffff;
-                color: #000000;
-            }
-            .main {
-                margin-left: 200px;
-            }
-             td {
-                padding: 4px;
-
-            }
-            th {
-                padding: 4px;
-                text-align: center;
-            }
-            .red{
-                color:red;
-            }
-            .side-by-side {
-                display: inline-block; 
-                margin-right: 20px;    
-            }
-            .button {
-                padding: 8px 16px;
-                font-size: 14px;
-                cursor: pointer;
-                background-color: #f5f5f5;
-                color: #333;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                transition: background-color 0.3s ease;
-            }
-
-            .button:hover {
-                background-color: #e0e0e0;
-            }
+   body {
+            font-family: "serif";
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .main {
+            margin-left: 200px;
+        }
+        td {
+            padding: 4px;
+        }
+        th {
+            padding: 4px;
+            text-align: center;
+        }
+        .red {
+            color: red;
+        }
+        .side-by-side {
+            display: inline-block;
+            margin-right: 20px;
+        }
+        .button {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #f5f5f5;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #e0e0e0;
+        }
+        .disabled-label {
+            color: #808080;
+            font-weight: lighter;
+        }
+   
             </style>
     </head>
     <body>
         <div class="main">
         <h1> Manage User Booking</h1>
-        <div class="side-by-side">
-            <h3>Selected student:</h3>
-            <h3 class="red">${userName}</h3>
-        </div>
+            <h4 class="red">Selected student: ${userName}</h4>
+            
         
-        <h4>Booked time slots </h4>
+        <h3>Student's Active Booked Time Slots</h3>
          <c:if test="${empty userBookings}">
                 No booked time slots.
                 <br>
                 <br>
-            </c:if>
+         </c:if>
             <c:if test="${not empty userBookings}">
-                <form action="removetimeslot" method="post" onsubmit="return validateForm()">
+                <form action="deletetimeslot" method="post" onsubmit="return validateForm()">
+                    <input type="hidden" name="userId" value="${userId}" />
+                    <input type="hidden" name="userName" value="${userName}" />
                     <table border="1">
                         <thead>
                             <tr>
@@ -98,14 +101,71 @@
                     <input type="submit" value="Delete booked time slot" class="button">
                 </c:if>
             </form>
-        </div>
-    </body>
+                
+                <hr>
+                
+                <h3>Assign a new time slot to student</h3>
+                <c:if test="${empty bookingList}">
+                     No available time slots for selected student.
+                <br>
+                <br>
+                </c:if>
+                 <c:if test="${not empty bookingList}">
+                <form action="assigntimeslot" method="post" onsubmit="return validateForm()">
+                    <input type="hidden" name="userId" value="${userId}" />
+                    <input type="hidden" name="userName" value="${userName}" />
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Choose</th>
+                                <th>Type of Session</th>
+                                <th>Location</th>
+                                <th>Time slot</th>
+                                <th>Course</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="booking" items="${bookingList}">
+                                <tr>
+                                    <td>
+                                        <label>
+                                            <input type="radio" name="selectedTimeSlot" value="${booking.id}" 
+                                                   ${not booking.isAvailable ? 'disabled' : ''} 
+                                                   class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                            <span class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                                ${booking.isAvailable ? '' : 'Full '}
+                                            </span>
+                                        </label>
+                                    </td>
+                                    <td class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                        ${booking.typeOfSession}
+                                    </td>
+                                    <td class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                        ${booking.location}
+                                    </td>
+                                    <td class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                        ${booking.startTime}
+                                    </td>
+                                    <td class="${not booking.isAvailable ? 'disabled-label' : ''}">
+                                        ${booking.courseName}
+                                    </td>
+                                </tr>
+
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                    <br>
+                    <input type="submit" value="Assign time slot" class="button">
+                </form>
+                 </c:if>
+                
+            </div>
+        </body>
     <script>
-
         function validateForm() {
-            var selectedCourse = document.querySelector('input[name="selectedTimeSlot"]:checked');
+            var selectedTimeSlot = document.querySelector('input[name="selectedTimeSlot"]:checked');
 
-            if (!selectedCourse) {
+            if (!selectedTimeSlot) {
                 alert('Please select a time slot!');
                 return false; // Prevent form submission if no course is selected
             }

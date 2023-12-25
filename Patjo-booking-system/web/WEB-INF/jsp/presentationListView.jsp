@@ -113,6 +113,7 @@
                     <div class="form-container">
 
                         <form id="showListForm" action="showpresentationlist" method="get" onsubmit="return validateForm()">
+                            <input type="hidden" name="selectedListId" id="selectedListId" value="">
                             <input type="submit" value="Show List" class="button">
                         </form>
 
@@ -128,20 +129,19 @@
     </body>
 
     <script>
-        function toPresentationList() {
-            window.location.href = '/Patjo-booking-system/presentationlist';
-        }
-
         function validateForm() {
             var selectedList = document.querySelector('input[name="selectedList"]:checked');
 
             if (!selectedList) {
                 alert('Please select a list!');
-                return false; // Prevent form submission if no course is selected
+            return false; // Prevent form submission if no list is selected
             }
 
+            // Set the value of the hidden input
+            document.getElementById('selectedListId').value = selectedList.value;
+
             return true; // Proceed with form submission
-        }
+            }
 
         function deleteList() {
             var selectedListToRemove = document.querySelector('input[name="selectedList"]:checked');
@@ -161,6 +161,10 @@
 
             // Prevent the first form from submitting
             return false;
+        }
+        
+        function toPresentationList() {
+            window.location.href = '/Patjo-booking-system/presentationlist';
         }
 
     </script>
