@@ -101,10 +101,10 @@ public class HandleUserController {
         System.out.println("userid: " + userId);
 
         List<BookingDTO> userBookings = userService.getUsersActiveBookings(userId);
-        List<PresentationListDTO> presentationLists = userService.getAllPresentationLists();
+        //List<BookingDTO> availableTimeSlots = userService.getAvailableTimeSlots(userId);
 
         model.addAttribute("userBookings", userBookings);
-        model.addAttribute("presentationLists", presentationLists);
+        //model.addAttribute("availableTimeSlots", availableTimeSlots);
         model.addAttribute("userName", userName);
 
         return "userBookingView";

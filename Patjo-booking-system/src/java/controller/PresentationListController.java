@@ -46,7 +46,7 @@ public class PresentationListController {
      * @return
      */
     @RequestMapping("/showpresentationlist")
-    public String showPresentationList(@RequestParam("selectedList") int selectedListId, Model model) {
+    public String showPresentationList(@RequestParam("selectedListId") int selectedListId, Model model) {
         List<BookingDTO> selectedPresentationList = presentationListService.fetchSelectedPresentationList(selectedListId);
         System.out.println("Selected List ID: " + selectedListId);
         model.addAttribute("selectedPresentationList", selectedPresentationList);
