@@ -75,6 +75,7 @@
                                 <th>Type of Session</th>
                                 <th>Location</th>
                                 <th>Time slot</th>
+                                <th>Course</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -92,6 +93,9 @@
                                     </td>
                                     <td>
                                         ${booking.startTime}
+                                    </td>
+                                      <td>
+                                        ${booking.courseName}
                                     </td>
                                 </tr>
                             </c:forEach>
