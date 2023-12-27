@@ -81,7 +81,13 @@ public class BookingRepository {
      * @return A list of BookingDTO objects representing the user's bookings.
      */
     public List<BookingDTO> fetchUserBookingsFromDB(Integer userId) {
-        String query = "SELECT B.* FROM PATJODB.USERS_BOOKING UB JOIN PATJODB.BOOKING B ON UB.BOOKING_ID = B.BOOKING_ID WHERE UB.USERS_ID = ?";
+        String query = "SELECT B.*, C.COURSE_NAME "
+                + "FROM PATJODB.USERS_BOOKING UB "
+                + "JOIN PATJODB.BOOKING B ON UB.BOOKING_ID = B.BOOKING_ID "
+                + "JOIN PATJODB.BOOKING_LIST BL ON B.BOOKING_ID = BL.BOOKING_ID "
+                + "JOIN PATJODB.LIST L ON BL.LIST_ID = L.LIST_ID "
+                + "JOIN PATJODB.COURSE C ON L.COURSE_ID = C.COURSE_ID "
+                + "WHERE UB.USERS_ID = ?";
 
         return jdbcTemplate.query(query, (rs, rowNum)
                 -> new BookingDTO(
@@ -89,7 +95,8 @@ public class BookingRepository {
                         rs.getString("BOOKING_TYPE_OF_SESSION"),
                         rs.getString("BOOKING_LOCATION"),
                         rs.getString("START_TIME"),
-                        rs.getBoolean("AVAILABLE")
+                        rs.getBoolean("AVAILABLE"),
+                        rs.getString("COURSE_NAME")
                 ), userId);
     }
 
