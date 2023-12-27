@@ -7,22 +7,21 @@ import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import repository.BookingRepository;
-import repository.UserRepository;
+import repository.HandleUserRepository;
 
 @Service
-public class UserService {
+public class HandleUserService {
 
-    private UserRepository userRepository;
+    private HandleUserRepository handleUserRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, BookingRepository bookingRepository) {
-        this.userRepository = userRepository;
+    public HandleUserService(HandleUserRepository handleUserRepository) {
+        this.handleUserRepository = handleUserRepository;
     }
 
     @Transactional
     public void saveUser(User user) {
-        userRepository.saveUser(user);
+        handleUserRepository.saveUser(user);
     }
 
     public void addNewUser(String username, String password, Boolean isAdmin) {
@@ -35,7 +34,7 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        return userRepository.fetchAllUsersFromDB();
+        return handleUserRepository.fetchAllUsersFromDB();
     }
 
     public List<User> getAllAdminUsersFromExistingList(List<User> allUsers) {
@@ -80,16 +79,6 @@ public class UserService {
         return list;
     }
 
-    public User handleUserLogin(String username, String password) {
-        User user = userRepository.findByUsername(username);
-
-        System.out.println(user);
-        if (user != null && user.getPassword().equals(password)) {
-            return user; // Return user ID to the controller
-        }
-        return null; // Return null if user doesn't exist or password doesn't match
-    }
-
     /**
      * Removes the selected user(s) and their associated bookings. If a user has
      * associated bookings, it calls the method
@@ -102,12 +91,12 @@ public class UserService {
 
         for (String id : selectedUserIds) {
             Integer userId = Integer.valueOf(id);
-            List<Integer> bookingIds = userRepository.checkAssociatedBookings(userId);
+            List<Integer> bookingIds = handleUserRepository.checkAssociatedBookings(userId);
 
             if (!bookingIds.isEmpty()) {
                 updateAssociatedBookingsAvailability(bookingIds);
             }
-            userRepository.removeUserFromDB(userId);
+            handleUserRepository.removeUserFromDB(userId);
         }
     }
 
@@ -120,7 +109,7 @@ public class UserService {
     private void updateAssociatedBookingsAvailability(List<Integer> bookingIds) {
 
         for (Integer bookingId : bookingIds) {
-            userRepository.markAssociatedBookingsAsAvailable(bookingId);
+            handleUserRepository.markAssociatedBookingsAsAvailable(bookingId);
         }
     }
 
@@ -142,7 +131,7 @@ public class UserService {
      * @return List of BookingDTO representing active bookings for the user.
      */
     public List<BookingDTO> getUsersActiveBookings(Integer userId) {
-        return userRepository.fetchUserBookingsFromDB(userId);
+        return handleUserRepository.fetchUserBookingsFromDB(userId);
 
     }
 
@@ -154,7 +143,7 @@ public class UserService {
      * user.
      */
     public List<BookingDTO> getAvailableTimeSlots(Integer userId) {
-        return userRepository.getAvailableTimeSlotsFromDB(userId);
+        return handleUserRepository.getAvailableTimeSlotsFromDB(userId);
 
     }
 
@@ -167,8 +156,8 @@ public class UserService {
      */
     public void deleteUserBooking(Integer userId, Integer timeSlotId) {
         System.out.println("userservice");
-        userRepository.deleteUserBookingFromDB(userId, timeSlotId);
-        userRepository.markAssociatedBookingsAsAvailable(timeSlotId);
+        handleUserRepository.deleteUserBookingFromDB(userId, timeSlotId);
+        handleUserRepository.markAssociatedBookingsAsAvailable(timeSlotId);
     }
 
     /**
@@ -178,7 +167,7 @@ public class UserService {
      * @param timeSlotId The ID of the time slot to be assigned.
      */
     public void assignTimeSlotToUser(Integer userId, Integer timeSlotId) {
-        userRepository.assignTimeSlotToUser(userId, timeSlotId);
-        userRepository.markTimeSlotAsNonAvailable(timeSlotId);
+        handleUserRepository.assignTimeSlotToUser(userId, timeSlotId);
+        handleUserRepository.markTimeSlotAsNonAvailable(timeSlotId);
     }
 }

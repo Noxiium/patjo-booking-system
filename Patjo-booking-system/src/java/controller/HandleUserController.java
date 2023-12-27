@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import service.UserService;
+import service.HandleUserService;
 
 /**
  *
@@ -22,7 +22,7 @@ import service.UserService;
 public class HandleUserController {
 
     @Autowired
-    private UserService userService;
+    private HandleUserService handleUserService;
 
     /**
      * Retrieves all users from the database and adds them to the model.
@@ -33,9 +33,9 @@ public class HandleUserController {
     @GetMapping
     @RequestMapping("users/showusers")
     public String getAllUsers(Model model) {
-        List<User> users = userService.getAllUsers();
-        List<User> admins = userService.getAllAdminUsersFromExistingList(users);
-        List<User> nonAdmins = userService.getAllNonAdminUsersFromExistingList(users);
+        List<User> users = handleUserService.getAllUsers();
+        List<User> admins = handleUserService.getAllAdminUsersFromExistingList(users);
+        List<User> nonAdmins = handleUserService.getAllNonAdminUsersFromExistingList(users);
         model.addAttribute("adminList", admins);
         model.addAttribute("nonAdminList", nonAdmins);// Fetch all users from the database
         return "handleUsersView";
@@ -48,14 +48,14 @@ public class HandleUserController {
             @RequestParam String password,
             @RequestParam(defaultValue = "false") boolean isAdmin,
             Model model) {
-        // Create User object and save to database using UserService or UserRepository
+        // Create User object and save to database using HandleUserService or UserRepository
         try {
-            userService.addNewUser(username, password, isAdmin);
+            handleUserService.addNewUser(username, password, isAdmin);
         } catch (DuplicateKeyException dke) {
             model.addAttribute("errorMessage", "Username already exists. Please choose a different username.");
             //TODO Handle the errorMessage in handleUserView so the user see the error.
         }
-        List<User> users = userService.getAllUsers();
+        List<User> users = handleUserService.getAllUsers();
         model.addAttribute("userList", users);
 
         // Redirect to the same page after successful addition
@@ -77,7 +77,7 @@ public class HandleUserController {
         System.out.println("removeUsers - POST");
         String[] selectedUserIds = userIds.split(",");
 
-        userService.removeUserAndAssociatedBookings(selectedUserIds);
+        handleUserService.removeUserAndAssociatedBookings(selectedUserIds);
         redirectAttributes.addFlashAttribute("deleteduser", "deleteduser");
         return "redirect:/users/showusers";
     }
@@ -90,7 +90,7 @@ public class HandleUserController {
      */
     @RequestMapping("/users/managebooking")
     public String showUsers(Model model) {
-        List<User> users = userService.getAllStudentUsers();
+        List<User> users = handleUserService.getAllStudentUsers();
         model.addAttribute("userList", users);
 
         return "manageBookingView";
@@ -110,8 +110,8 @@ public class HandleUserController {
             @RequestParam("username") String userName,
             Model model) {
 
-        List<BookingDTO> userBookings = userService.getUsersActiveBookings(userId);
-        List<BookingDTO> bookingList = userService.getAvailableTimeSlots(userId);
+        List<BookingDTO> userBookings = handleUserService.getUsersActiveBookings(userId);
+        List<BookingDTO> bookingList = handleUserService.getAvailableTimeSlots(userId);
 
         model.addAttribute("userBookings", userBookings);
         model.addAttribute("bookingList", bookingList);
@@ -136,7 +136,7 @@ public class HandleUserController {
             @RequestParam("userName") String userName,
             @RequestParam("selectedTimeSlot") Integer timeSlotId, Model model) {
 
-        userService.deleteUserBooking(userId, timeSlotId);
+        handleUserService.deleteUserBooking(userId, timeSlotId);
 
         model.addAttribute("username", userName);
         model.addAttribute("userId", userId);
@@ -158,7 +158,7 @@ public class HandleUserController {
             @RequestParam("userName") String userName,
             @RequestParam("selectedTimeSlot") Integer timeSlotId, Model model) {
 
-        userService.assignTimeSlotToUser(userId, timeSlotId);
+        handleUserService.assignTimeSlotToUser(userId, timeSlotId);
 
         model.addAttribute("username", userName);
         model.addAttribute("userId", userId);

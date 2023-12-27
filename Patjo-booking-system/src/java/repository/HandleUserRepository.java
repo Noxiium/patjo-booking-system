@@ -10,12 +10,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class UserRepository {
+public class HandleUserRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public UserRepository(JdbcTemplate jdbcTemplate) {
+    public HandleUserRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
@@ -27,24 +27,6 @@ public class UserRepository {
     public Integer fetchUserID(User user) {
         String query = "SELECT ID FROM PATJODB.USERS WHERE USERSNAME = ? AND PASSWORD = ?";
         return jdbcTemplate.queryForObject(query, Integer.class, user.getUsername(), user.getPassword());
-    }
-
-    public User findByUsername(String username) {
-        String sql = "SELECT * FROM PATJODB.USERS WHERE usersname = ?";
-
-        try {
-            return jdbcTemplate.queryForObject(sql, new Object[]{username}, (rs, rowNum) -> {
-                User user = new User();
-                user.setUserId(rs.getInt("users_id"));
-                user.setUsername(rs.getString("usersname"));
-                user.setPassword(rs.getString("password"));
-                user.setIsAdmin(rs.getInt("admin"));
-
-                return user;
-            });
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
     }
 
     public List<User> fetchAllUsersFromDB() {

@@ -1,7 +1,5 @@
 <%-- 
-    Document   : bookedTimeSlotsView
-    Created on : 18 Dec 2023, 10:43:50
-    Author     : patricialagerhult
+ Student - My booked Time Slots view
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
