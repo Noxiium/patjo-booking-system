@@ -124,19 +124,61 @@ public class UserService {
         }
     }
 
+    /**
+     * Retrieves all student users from the database.
+     *
+     * @return List of User objects representing all student users.
+     */
     public List<User> getAllStudentUsers() {
         List<User> users = getAllUsers();
-         return getAllNonAdminUsersFromExistingList(users);
-      
+        return getAllNonAdminUsersFromExistingList(users);
+
     }
 
+    /**
+     * Retrieves active bookings for a specific user from the database.
+     *
+     * @param userId The ID of the user
+     * @return List of BookingDTO representing active bookings for the user.
+     */
     public List<BookingDTO> getUsersActiveBookings(Integer userId) {
         return userRepository.fetchUserBookingsFromDB(userId);
 
     }
 
+    /**
+     * Retrieves available time slots for a specific user from the database.
+     *
+     * @param userId The ID of the user
+     * @return List of BookingDTO representing available time slots for the
+     * user.
+     */
     public List<BookingDTO> getAvailableTimeSlots(Integer userId) {
-     return  userRepository.getAvailableTimeSlotsFromDB(userId);  
+        return userRepository.getAvailableTimeSlotsFromDB(userId);
 
+    }
+
+    /**
+     * Deletes a user's booking for a specific time slot and marks that time
+     * slot as available.
+     *
+     * @param userId The ID of the user
+     * @param timeSlotId The ID of the time slot to be deleted.
+     */
+    public void deleteUserBooking(Integer userId, Integer timeSlotId) {
+        System.out.println("userservice");
+        userRepository.deleteUserBookingFromDB(userId, timeSlotId);
+        userRepository.markAssociatedBookingsAsAvailable(timeSlotId);
+    }
+
+    /**
+     * Assigns a time slot to a user and marks the time slot as non-available.
+     *
+     * @param userId The ID of the user
+     * @param timeSlotId The ID of the time slot to be assigned.
+     */
+    public void assignTimeSlotToUser(Integer userId, Integer timeSlotId) {
+        userRepository.assignTimeSlotToUser(userId, timeSlotId);
+        userRepository.markTimeSlotAsNonAvailable(timeSlotId);
     }
 }
