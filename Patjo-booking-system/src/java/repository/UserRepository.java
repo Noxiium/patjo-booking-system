@@ -103,7 +103,13 @@ public class UserRepository {
      * @return A list of BookingDTO objects representing the user's bookings.
      */
     public List<BookingDTO> fetchUserBookingsFromDB(Integer userId) {
-        String query = "SELECT B.* FROM PATJODB.USERS_BOOKING UB JOIN PATJODB.BOOKING B ON UB.BOOKING_ID = B.BOOKING_ID WHERE UB.USERS_ID = ?";
+        String query = "SELECT B.*, C.COURSE_NAME "
+                + "FROM PATJODB.USERS_BOOKING UB "
+                + "JOIN PATJODB.BOOKING_LIST BL ON UB.BOOKING_ID = BL.BOOKING_ID "
+                + "JOIN PATJODB.BOOKING B ON BL.BOOKING_ID = B.BOOKING_ID "
+                + "JOIN PATJODB.LIST L ON BL.LIST_ID = L.LIST_ID "
+                + "JOIN PATJODB.COURSE C ON L.COURSE_ID = C.COURSE_ID "
+                + "WHERE UB.USERS_ID = ?";
 
         return jdbcTemplate.query(query, (rs, rowNum)
                 -> new BookingDTO(
@@ -111,10 +117,19 @@ public class UserRepository {
                         rs.getString("BOOKING_TYPE_OF_SESSION"),
                         rs.getString("BOOKING_LOCATION"),
                         rs.getString("START_TIME"),
-                        rs.getBoolean("AVAILABLE")
+                        rs.getBoolean("AVAILABLE"),
+                        rs.getString("COURSE_NAME")
                 ), userId);
     }
 
+    /**
+     * Retrieves available time slots for a user based on their enrolled
+     * courses.
+     *
+     * @param userId The ID of the user for whom available time slots are
+     * retrieved.
+     * @return List of BookingDTO representing available time slots
+     */
     public List<BookingDTO> getAvailableTimeSlotsFromDB(Integer userId) {
         String query = "SELECT B.*, C.COURSE_NAME "
                 + "FROM PATJODB.USERS_COURSE UC "
@@ -131,8 +146,41 @@ public class UserRepository {
                         rs.getString("BOOKING_LOCATION"),
                         rs.getString("START_TIME"),
                         rs.getBoolean("AVAILABLE"),
-                        rs.getString("COURSE_NAME") 
+                        rs.getString("COURSE_NAME")
                 ), userId);
+    }
+
+    /**
+     * Deletes a user's booking for a specific time slot.
+     *
+     * @param userId The ID of the user whose booking is to be deleted.
+     * @param timeSlotId The ID of the time slot to be deleted.
+     */
+    public void deleteUserBookingFromDB(Integer userId, Integer timeSlotId) {
+
+        String query = "DELETE FROM PATJODB.USERS_BOOKING WHERE USERS_ID = ? AND BOOKING_ID = ?";
+        jdbcTemplate.update(query, userId, timeSlotId);
+    }
+
+    /**
+     * Assigns a time slot to a user
+     *
+     * @param userId The ID of the user to whom the time slot is assigned.
+     * @param timeSlotId The ID of the time slot to be assigned.
+     */
+    public void assignTimeSlotToUser(Integer userId, Integer timeSlotId) {
+        String query = "INSERT INTO PATJODB.USERS_BOOKING(USERS_ID,BOOKING_ID)VALUES(?, ?)";
+        jdbcTemplate.update(query, userId, timeSlotId);
+    }
+
+    /**
+     * Marks a time slot as non-available
+     *
+     * @param timeSlotId The ID of the time slot to be marked as non-available.
+     */
+    public void markTimeSlotAsNonAvailable(Integer timeSlotId) {
+        String query = "UPDATE PATJODB.BOOKING SET AVAILABLE = FALSE WHERE BOOKING_ID = ?";
+        jdbcTemplate.update(query, timeSlotId);
     }
 
 }
