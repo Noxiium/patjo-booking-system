@@ -2,20 +2,15 @@ package controller;
 
 import java.util.List;
 import model.BookingDTO;
-import model.PresentationListDTO;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import service.UserService;
 
@@ -87,6 +82,12 @@ public class HandleUserController {
         return "redirect:/users/showusers";
     }
 
+    /**
+     * Displays a view for managing user bookings
+     *
+     * @param model The Spring Model to add attributes for the view.
+     * @return
+     */
     @RequestMapping("/users/managebooking")
     public String showUsers(Model model) {
         List<User> users = userService.getAllStudentUsers();
@@ -95,11 +96,19 @@ public class HandleUserController {
         return "manageBookingView";
     }
 
+    /**
+     * Displays a view for managing a specific user's bookings, showing both
+     * active bookings and available time slots.
+     *
+     * @param userId The ID of the user
+     * @param userName The name of the user
+     * @param model The Spring Model to add attributes for the view.
+     * @return
+     */
     @RequestMapping("/users/showuserbooking")
-    public String manageUserBooking(@RequestParam("userId") Integer userId, 
-                                    @RequestParam("username") String userName, 
-                                    Model model) {
-        System.out.println("userid: " + userId);
+    public String manageUserBooking(@RequestParam("userId") Integer userId,
+            @RequestParam("username") String userName,
+            Model model) {
 
         List<BookingDTO> userBookings = userService.getUsersActiveBookings(userId);
         List<BookingDTO> bookingList = userService.getAvailableTimeSlots(userId);
@@ -112,19 +121,48 @@ public class HandleUserController {
         return "userBookingView";
 
     }
-    
+
+    /**
+     * Deletes a specific time slot for a user
+     *
+     * @param userId The ID of the user
+     * @param userName The name of the user
+     * @param timeSlotId The ID of the time slot to be deleted.
+     * @param model The Spring Model to add attributes for the view.
+     * @return A redirect to the "showuserbooking" view.
+     */
     @RequestMapping("/users/deletetimeslot")
     public String deleteUserTimeSlot(@RequestParam("userId") Integer userId,
-                                    @RequestParam("userName") String userName,
-                                    @RequestParam("selectedTimeSlot") Integer timeSlotId, Model model){
-        
-        System.out.println(userId);
-        System.out.println(userName);
-        System.out.println(timeSlotId);
-        
+            @RequestParam("userName") String userName,
+            @RequestParam("selectedTimeSlot") Integer timeSlotId, Model model) {
+
+        userService.deleteUserBooking(userId, timeSlotId);
+
         model.addAttribute("username", userName);
         model.addAttribute("userId", userId);
         return "redirect:/users/showuserbooking";
-    
+
+    }
+
+    /**
+     * Assigns a specific time slot to a user
+     *
+     * @param userId The ID of the user
+     * @param userName The name of the user.
+     * @param timeSlotId The ID of the time slot to be assigned.
+     * @param model The Spring Model to add attributes for the view.
+     * @return A redirect to the "showuserbooking" view.
+     */
+    @RequestMapping("/users/assigntimeslot")
+    public String assignTimeSlotToUser(@RequestParam("userId") Integer userId,
+            @RequestParam("userName") String userName,
+            @RequestParam("selectedTimeSlot") Integer timeSlotId, Model model) {
+
+        userService.assignTimeSlotToUser(userId, timeSlotId);
+
+        model.addAttribute("username", userName);
+        model.addAttribute("userId", userId);
+
+        return "redirect:/users/showuserbooking";
     }
 }
