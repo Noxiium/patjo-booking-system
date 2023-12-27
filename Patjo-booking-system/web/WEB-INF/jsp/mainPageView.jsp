@@ -1,8 +1,7 @@
 <%-- 
-    Document   : mainPageView
-    Created on : Dec 13, 2023, 6:57:22 PM
-    Author     : Indiana Johan
+ Student - Main Page
 --%>
+
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
