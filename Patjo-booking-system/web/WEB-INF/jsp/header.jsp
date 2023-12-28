@@ -36,6 +36,30 @@
             }
 
         </style>
+             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+        <script>
+               var socket = new WebSocket("ws://localhost:8080/Patjo-booking-system/endpoint");
+                
+                
+                socket.onmessage = function (event) {
+                    if (event.data === "updateBooking" + ${sessionScope.userId}) {
+        
+                        Swal.fire({
+                        title: 'Your account has been deleted',
+                        icon: 'warning',
+                        showCancelButton: false,
+                        confirmButtonText: 'OK',
+                    }).then((result) => {
+          
+                        window.location.href = "/Patjo-booking-system/";
+                        });
+                    }else {
+                        location.reload();
+                    }
+                    
+            };
+             
+        </script>
     </head>
     <body>
         <div id="header">
