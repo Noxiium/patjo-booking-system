@@ -1,6 +1,6 @@
 package service;
 
-import java.util.ArrayList;
+import controller.WebSocketEndpoint;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import model.BookingDTO;
@@ -68,6 +68,9 @@ public class BookingService {
         // Convert the selected time slot string to an Integer
         Integer selectedTimeSlotId = Integer.valueOf(selectedTimeSlot);
         bookingRepository.insertBookedTimeIntoDB(selectedTimeSlotId, userId);
+        
+        // Send a message to all connected WebSocket clients to notify them of an update.
+         WebSocketEndpoint.sendMessageToAll("updateBooking");
     }
 
     /**
@@ -94,6 +97,9 @@ public class BookingService {
         Integer userId = (Integer) session.getAttribute("userId");
 
         bookingRepository.removeBookedTimeSlotFromDB(selectedTimeSlotId, userId);
+        
+        // Send a message to all connected WebSocket clients to notify them of an update.
+         WebSocketEndpoint.sendMessageToAll("updateBooking");
     }
 
 }

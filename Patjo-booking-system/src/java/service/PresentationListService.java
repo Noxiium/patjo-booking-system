@@ -1,5 +1,6 @@
 package service;
 
+import controller.WebSocketEndpoint;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -57,6 +58,9 @@ public class PresentationListService {
     public void deleteSelectedPresentationList(int selectedListId) {
         presentationListRepository.deleteAssociatedBookings(selectedListId);
         presentationListRepository.deletePresentationListFromDB(selectedListId);
+        
+        // Send a message to all connected WebSocket clients to notify them of an update.
+         WebSocketEndpoint.sendMessageToAll("updateBooking");
     }
 
     /**
@@ -85,6 +89,9 @@ public class PresentationListService {
         int listId = presentationListRepository.saveListInDBReturnListId(userId, courseId);
         List<Integer> bookingIds = saveAssociatedBookings(bookingDTOList);
         presentationListRepository.updateBookingListReferenceTable(listId, bookingIds);
+        
+        // Send a message to all connected WebSocket clients to notify them of an update.
+         WebSocketEndpoint.sendMessageToAll("updateBooking");
     }
 
     /**
