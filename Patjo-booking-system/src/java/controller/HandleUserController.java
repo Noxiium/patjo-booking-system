@@ -58,8 +58,8 @@ public class HandleUserController {
         List<User> users = handleUserService.getAllUsers();
         model.addAttribute("userList", users);
 
-        // Redirect to the same page after successful addition
-        return "redirect:/users/showusers"; // Replace 'adminPage' with your actual page URL
+       
+        return "redirect:/users/showusers"; 
     }
 
     /**
@@ -76,6 +76,7 @@ public class HandleUserController {
     public String removeUsers(@RequestParam("userIds") String userIds, Model model, RedirectAttributes redirectAttributes) {
         System.out.println("removeUsers - POST");
         String[] selectedUserIds = userIds.split(",");
+     
 
         handleUserService.removeUserAndAssociatedBookings(selectedUserIds);
         redirectAttributes.addFlashAttribute("deleteduser", "deleteduser");
