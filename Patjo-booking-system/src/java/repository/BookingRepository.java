@@ -23,13 +23,25 @@ public class BookingRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public List<CourseDTO> fetchAvailableCoursesFromDB() {
-        String query = "SELECT COURSE_ID,COURSE_NAME FROM PATJODB.COURSE";
-        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(CourseDTO.class));
+    /**
+     * Retrieves a list of available courses for a given user from the database.
+     *
+     * @param userId The ID of the user
+     * @return A list of CourseDTO representing available courses.
+     */
+    public List<CourseDTO> fetchAvailableCoursesFromDB(Integer userId) {
+        String query = "SELECT C.COURSE_ID, C.COURSE_NAME FROM PATJODB.COURSE C JOIN PATJODB.USERS_COURSE UC ON C.COURSE_ID = UC.COURSE_ID WHERE UC.USERS_ID = ?";
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(CourseDTO.class), userId);
     }
 
+    /**
+     * Retrieves a list of bookings for a specific course from the database.
+     *
+     * @param courseId The ID of the course 
+     * @return A list of BookingDTO representing bookings for the
+     * specified course.
+     */
     public List<BookingDTO> fetchBookingListForCourseFromDB(int courseId) {
-        System.out.println("courseId REPO: " + courseId);
         String query = """
                    SELECT B.*
                    FROM PATJODB.BOOKING B

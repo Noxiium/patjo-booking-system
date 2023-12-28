@@ -30,8 +30,12 @@ public class BookingService {
      *
      * @return List of available courses
      */
-    public List<CourseDTO> fetchAvailableCourses() {
-        List<CourseDTO> courseList = bookingRepository.fetchAvailableCoursesFromDB();
+    public List<CourseDTO> fetchAvailableCourses(HttpSession session) {
+        
+        // Retrieve the userId from the current session
+        Integer userId = (Integer) session.getAttribute("userId");
+        
+        List<CourseDTO> courseList = bookingRepository.fetchAvailableCoursesFromDB(userId);
 
         for (CourseDTO course : courseList) {
             System.out.println(course.getCourseName());
