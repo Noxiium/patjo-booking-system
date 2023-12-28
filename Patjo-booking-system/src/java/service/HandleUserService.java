@@ -1,5 +1,6 @@
 package service;
 
+import controller.WebSocketEndpoint;
 import java.util.ArrayList;
 import java.util.List;
 import model.BookingDTO;
@@ -12,11 +13,13 @@ import repository.HandleUserRepository;
 @Service
 public class HandleUserService {
 
-    private HandleUserRepository handleUserRepository;
+    private final HandleUserRepository handleUserRepository;
+    
 
     @Autowired
     public HandleUserService(HandleUserRepository handleUserRepository) {
         this.handleUserRepository = handleUserRepository;
+       
     }
 
     @Transactional
@@ -57,27 +60,6 @@ public class HandleUserService {
         return nonAdminUsers;
     }
 
-    public List<User> tempGetAllUsers() {
-
-        // TODO Actually fetch from DATABASE using userRepository
-        List<User> list = new ArrayList<>();
-        User user1 = new User("johan@kth.se", "1234", 1);
-        user1.setUserId(4);
-        list.add(user1);
-
-        User user2 = new User("namn7@kth.se", "1234", 0);
-        user2.setUserId(5);
-        list.add(user2);
-
-        User user3 = new User("namn2@kth.se", "1234", 0);
-        user3.setUserId(6);
-        list.add(user3);
-
-        for (User user : list) {
-            System.out.print(user);
-        }
-        return list;
-    }
 
     /**
      * Removes the selected user(s) and their associated bookings. If a user has
@@ -97,6 +79,9 @@ public class HandleUserService {
                 updateAssociatedBookingsAvailability(bookingIds);
             }
             handleUserRepository.removeUserFromDB(userId);
+            
+           // Send a message to all connected WebSocket clients to notify them of an update.
+            WebSocketEndpoint.sendMessageToAll("updateBooking" + id);
         }
     }
 
@@ -158,6 +143,9 @@ public class HandleUserService {
         System.out.println("userservice");
         handleUserRepository.deleteUserBookingFromDB(userId, timeSlotId);
         handleUserRepository.markAssociatedBookingsAsAvailable(timeSlotId);
+        
+        // Send a message to all connected WebSocket clients to notify them of an update.
+        WebSocketEndpoint.sendMessageToAll("updateBooking");
     }
 
     /**
@@ -169,5 +157,8 @@ public class HandleUserService {
     public void assignTimeSlotToUser(Integer userId, Integer timeSlotId) {
         handleUserRepository.assignTimeSlotToUser(userId, timeSlotId);
         handleUserRepository.markTimeSlotAsNonAvailable(timeSlotId);
+        
+        // Send a message to all connected WebSocket clients to notify them of an update.
+         WebSocketEndpoint.sendMessageToAll("updateBooking");
     }
 }
