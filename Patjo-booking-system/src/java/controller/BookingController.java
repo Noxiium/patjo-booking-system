@@ -38,8 +38,8 @@ public class BookingController {
      * @return selectCourseView
      */
     @RequestMapping("/showcourses")
-    public String showAvailableCourses(Model model) {
-        List<CourseDTO> courseList = bookingService.fetchAvailableCourses();
+    public String showAvailableCourses(Model model, HttpSession session) {
+        List<CourseDTO> courseList = bookingService.fetchAvailableCourses(session);
         model.addAttribute("courseList", courseList);
 
         return "selectCourseView";
