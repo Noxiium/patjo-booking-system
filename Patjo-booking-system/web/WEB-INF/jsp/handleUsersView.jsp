@@ -76,6 +76,13 @@
 
             <label for="isAdmin">Admin:</label>
             <input type="checkbox" id="isAdmin" name="isAdmin">
+            
+            <select id="courseId" name="courseId" required multiple>
+                <option value="" disabled selected>Select a course</option>
+                    <c:forEach var="course" items="${courseList}">
+                        <option value="${course.courseId}">${course.courseName}</option>
+                    </c:forEach>
+            </select>
             <input type="submit" value="Create new user" class="button">
             <% if (request.getAttribute("errorMessage") != null) {%>
             <div class="error-message">
@@ -134,18 +141,13 @@
         </form>
         </div>
          </div>
+        
         <script>
-            function addUser() {
-                console.log('add user');
-            }
  
             function deleteSelectedUsers() {
                 // Get selected users
                 const selectedUsers = document.querySelectorAll('input[name="selectedUsers"]:checked');
                 const userIds = Array.from(selectedUsers).map(user => user.value);
-
-                // Log the IDs of selected users
-                console.log('Selected User IDs:', userIds);
 
                 // Create a hidden input field to hold user IDs
                 const hiddenInput = document.createElement('input');
@@ -185,7 +187,7 @@
                 const addUserForm = document.getElementById('addUser');
                 const username = addUserForm.querySelector('#username').value.trim();
                 const password = addUserForm.querySelector('#password').value.trim();
-
+                
                 // Check if all fields in the "Add User" form are filled
                 if (username === '' || password === '') {
                     alert('Please fill in all fields');

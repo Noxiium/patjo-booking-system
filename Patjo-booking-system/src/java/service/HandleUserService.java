@@ -3,7 +3,9 @@ package service;
 import controller.WebSocketEndpoint;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import model.BookingDTO;
+import model.CourseDTO;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,15 +27,19 @@ public class HandleUserService {
     @Transactional
     public void saveUser(User user) {
         handleUserRepository.saveUser(user);
+        
     }
 
-    public void addNewUser(String username, String password, Boolean isAdmin) {
+    public void addNewUser(String username, String password, Boolean isAdmin, int[] courseIDs) {
         int isAdminInt = 0;
         if (isAdmin) {
             isAdminInt = 1;
         }
         User newUser = new User(username, password, isAdminInt);
         saveUser(newUser);
+        int userId = handleUserRepository.fetchUserID(newUser);
+        for(int courseId : courseIDs)
+            handleUserRepository.insertCourseAndUserIds(userId, courseId);
     }
 
     public List<User> getAllUsers() {
@@ -117,7 +123,6 @@ public class HandleUserService {
      */
     public List<BookingDTO> getUsersActiveBookings(Integer userId) {
         return handleUserRepository.fetchUserBookingsFromDB(userId);
-
     }
 
     /**
@@ -160,5 +165,10 @@ public class HandleUserService {
         
         // Send a message to all connected WebSocket clients to notify them of an update.
          WebSocketEndpoint.sendMessageToAll("updateBooking");
+    }
+    
+     public List<CourseDTO> fetchAvailableCourses() {
+        List<CourseDTO> availableCourses = handleUserRepository.fetchAvailableCoursesFromDB();
+        return availableCourses;
     }
 }

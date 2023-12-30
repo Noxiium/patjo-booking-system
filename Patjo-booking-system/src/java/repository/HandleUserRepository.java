@@ -2,10 +2,12 @@ package repository;
 
 import java.util.List;
 import model.BookingDTO;
+import model.CourseDTO;
 import model.PresentationListDTO;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -25,7 +27,7 @@ public class HandleUserRepository {
     }
 
     public Integer fetchUserID(User user) {
-        String query = "SELECT ID FROM PATJODB.USERS WHERE USERSNAME = ? AND PASSWORD = ?";
+        String query = "SELECT USERS_ID FROM PATJODB.USERS WHERE USERSNAME = ? AND PASSWORD = ?";
         return jdbcTemplate.queryForObject(query, Integer.class, user.getUsername(), user.getPassword());
     }
 
@@ -163,6 +165,18 @@ public class HandleUserRepository {
     public void markTimeSlotAsNonAvailable(Integer timeSlotId) {
         String query = "UPDATE PATJODB.BOOKING SET AVAILABLE = FALSE WHERE BOOKING_ID = ?";
         jdbcTemplate.update(query, timeSlotId);
+    }
+
+    public List<CourseDTO> fetchAvailableCoursesFromDB() {
+        String query = "SELECT COURSE_ID,COURSE_NAME FROM PATJODB.COURSE";
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(CourseDTO.class));
+
+    }
+    
+    public void insertCourseAndUserIds(Integer userId, Integer courseId) {
+        String query = "INSERT INTO PATJODB.USERS_COURSE(USERS_ID,COURSE_ID)VALUES(?, ?)";
+        jdbcTemplate.update(query, userId, courseId);
+
     }
 
 }

@@ -1,7 +1,9 @@
 package controller;
 
+import java.util.Arrays;
 import java.util.List;
 import model.BookingDTO;
+import model.CourseDTO;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -38,6 +40,9 @@ public class HandleUserController {
         List<User> nonAdmins = handleUserService.getAllNonAdminUsersFromExistingList(users);
         model.addAttribute("adminList", admins);
         model.addAttribute("nonAdminList", nonAdmins);// Fetch all users from the database
+        
+        List<CourseDTO> courseList = handleUserService.fetchAvailableCourses();
+        model.addAttribute("courseList", courseList);
         return "handleUsersView";
     }
 
@@ -46,11 +51,18 @@ public class HandleUserController {
     @RequestMapping("/users/addUser")
     public String addUser(@RequestParam String username,
             @RequestParam String password,
+            @RequestParam String courseId,
             @RequestParam(defaultValue = "false") boolean isAdmin,
             Model model) {
+        
+        System.out.println("Selected Course Id:" + courseId);
+        String[] courseIdArray  = courseId.split(",");
+        int[] selectedCourseIds = Arrays.stream(courseIdArray)
+                                 .mapToInt(Integer::parseInt)
+                                 .toArray();
         // Create User object and save to database using HandleUserService or UserRepository
         try {
-            handleUserService.addNewUser(username, password, isAdmin);
+            handleUserService.addNewUser(username, password, isAdmin, selectedCourseIds);
         } catch (DuplicateKeyException dke) {
             model.addAttribute("errorMessage", "Username already exists. Please choose a different username.");
             //TODO Handle the errorMessage in handleUserView so the user see the error.

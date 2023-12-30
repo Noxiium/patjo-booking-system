@@ -14,6 +14,7 @@ public class User {
     private String username;
     private String password;
     private int isAdmin;
+    private String[] courseIds;
 
     public User(){
         
@@ -22,6 +23,13 @@ public class User {
         this.username = username;
         this.password = password;
         this.isAdmin = isAdmin;
+    }
+    
+    public User(String username, String password, int isAdmin, String[] courseIds) {
+        this.username = username;
+        this.password = password;
+        this.isAdmin = isAdmin;
+        this.courseIds = courseIds;
     }
 
     public Integer getUserId() {
@@ -54,6 +62,10 @@ public class User {
 
     public void setIsAdmin(int isAdmin) {
         this.isAdmin = isAdmin;
+    }
+    
+    public String[] getCourseIds(){
+        return courseIds;
     }
     
     @Override
