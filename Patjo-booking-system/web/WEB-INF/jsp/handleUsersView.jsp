@@ -187,9 +187,10 @@
                 const addUserForm = document.getElementById('addUser');
                 const username = addUserForm.querySelector('#username').value.trim();
                 const password = addUserForm.querySelector('#password').value.trim();
+                const course = addUserForm.querySelector('#courseId').value.trim();
                 
                 // Check if all fields in the "Add User" form are filled
-                if (username === '' || password === '') {
+                if (username === '' || password === '' || course === '') {
                     alert('Please fill in all fields');
                     return false; // Prevent form submission
                 }
