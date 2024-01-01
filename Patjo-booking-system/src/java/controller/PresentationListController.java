@@ -1,12 +1,14 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import model.BookingDTO;
 import model.CourseDTO;
 import model.PresentationListDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -92,41 +94,38 @@ public class PresentationListController {
     @RequestMapping("/presentationlist/savepresentationlist")
     public String savePresentationList(@RequestParam("typeOfSession") List<String> typeOfSession,
             @RequestParam("location") List<String> location,
-            @RequestParam("startTime") List<String> startTime,
+            @RequestParam("startTime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") List<Date> startTime,
             @RequestParam("courseId") String courseId,
             HttpSession session) {
 
-        System.out.println("Selected Course Id:" + courseId);
-        List<BookingDTO> bookingDTOList = buildBookingDTOList(typeOfSession, location, startTime);
-        presentationListService.saveCreatedPresentationList(bookingDTOList, session, Integer.valueOf(courseId));
+        presentationListService.saveCreatedPresentationList(typeOfSession, location, startTime, session, Integer.valueOf(courseId));
         return "redirect:/adminmain";
     }
 
     /**
-     * Builds a list of BookingDTO objects based on input lists for
-     * typeOfSession, location, and startTime.
+     * Handles the generation and saving of a presentation list.
      *
-     * @param typeOfSession List of strings representing the types of sessions.
-     * @param location List of strings representing the locations associated
-     * with each session.
-     * @param startTime List of strings representing the start times for each
-     * session.
-     * @return A List of BookingDTO objects representing the booking information
-     * for each session.
+     * @param typeOfSession The type of session 
+     * @param location The location 
+     * @param startTime The starting time for the first time slot
+     * @param numberOfTimeSlots The number of time slots to create
+     * @param intervalBetweenTimeSlots The interval between time slots in
+     * minutes.
+     * @param courseId The ID of the course
+     * @param session The HttpSession containing user-related information.
+     * @return 
      */
-    private List<BookingDTO> buildBookingDTOList(List<String> typeOfSession, List<String> location, List<String> startTime) {
+    @RequestMapping("/presentationlist/generatepresentationlist")
+    public String saveGeneratedPresentationList(@RequestParam("typeOfSession") String typeOfSession,
+            @RequestParam("location") String location,
+            @RequestParam("startTime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") Date startTime,
+            @RequestParam("numberOfTimeSlots") int numberOfTimeSlots,
+            @RequestParam("intervalBetweenTimeSlots") int intervalBetweenTimeSlots,
+            @RequestParam("course") String courseId,
+            HttpSession session) {
 
-        List<BookingDTO> bookingDTOList = new ArrayList<>();
-
-        for (int i = 0; i < typeOfSession.size(); i++) {
-            BookingDTO bookingDTO = new BookingDTO();
-            bookingDTO.setTypeOfSession(typeOfSession.get(i));
-            bookingDTO.setLocation(location.get(i));
-            bookingDTO.setStartTime(startTime.get(i));
-            bookingDTO.setIsAvailable(true);
-
-            bookingDTOList.add(bookingDTO);
-        }
-        return bookingDTOList;
+        presentationListService.saveGeneratedPresentationList(typeOfSession, location, startTime, numberOfTimeSlots, intervalBetweenTimeSlots, courseId, session);
+        return "redirect:/adminmain";
     }
+
 }

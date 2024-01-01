@@ -35,6 +35,17 @@
             .button:hover {
                 background-color: #e0e0e0;
             }
+            #generateList label {
+                display: inline-block;
+                width: 150px; 
+                margin-bottom: 10px; 
+            }
+
+            #generateList input,
+            #generateList select {
+                width: 200px; 
+                margin-bottom: 10px; 
+            }
         </style>
     </head>
     <body>
@@ -57,6 +68,38 @@
                 <button type="button" onclick="addRow()" class="button">Add Row</button>
                 <input type="submit" value="Submit" class="button">
             </form>
+            
+            <hr>
+            
+            <h1>Quick Presentation List Creator</h1>
+            <form id="generateList" action="generatepresentationlist" method="post" onsubmit="return validate()">
+                <label>Course: </label>
+                 <select id="course" name="course" required>
+                    <option value="" disabled selected>Select a course</option>
+                    <c:forEach var="course" items="${courseList}">
+                        <option value="${course.courseId}">${course.courseName}</option>
+                    </c:forEach>
+                </select>
+                <br>
+                <label>Number of time slots: </label>
+                    <input type="number" name="numberOfTimeSlots" required min="1" step="1">
+                    <br>
+                  <label>Type of Session:</label>
+                    <input type="text" name="typeOfSession" required>
+                    <br>
+
+                    <label>Location:</label>
+                    <input type="text" name="location" required>
+                    <br>
+
+                    <label>Start Time:</label>
+                    <input type="datetime-local" name="startTime" required>
+                    <br>
+                    <label>Interval: </label>
+                    <input type="number" name="intervalBetweenTimeSlots" required min="0" step="5">
+                <br>
+                <br>
+                <input type="submit" value="Submit" class="button">
         </div>
         <script>
             window.onload = function () {
@@ -65,6 +108,16 @@
 
             function validateForm() { 
                 var courseId = document.getElementById("courseId").value;
+
+                if (courseId === "") {
+                    alert("Please select a course before submitting the form.");
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+              function validate() { 
+                var courseId = document.getElementById("course").value;
 
                 if (courseId === "") {
                     alert("Please select a course before submitting the form.");
@@ -90,8 +143,9 @@
                     <input type="datetime-local" name="startTime" required>
         
                     <button type="button" onclick="removeRow(this)">X</button>
-    
-                    <hr>
+                    <br>
+                    <br>
+                   
                 `;
 
                 bookingRows.appendChild(newRow);
