@@ -157,4 +157,9 @@ public class PresentationListRepository {
             jdbcTemplate.update(query, listId, id);
         }
     }
+
+    public String getCourseNameFromId(String courseId) {
+       String query = "SELECT COURSE_NAME FROM PATJODB.COURSE WHERE COURSE_ID = ?";
+       return jdbcTemplate.queryForObject(query, String.class, courseId);
+    }
 }
