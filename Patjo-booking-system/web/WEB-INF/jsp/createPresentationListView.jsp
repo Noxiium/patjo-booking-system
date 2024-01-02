@@ -3,7 +3,7 @@
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ include file="header.jsp" %> 
+<%@ include file="pageHeader.jsp" %> 
 <%@ include file="sidebar.jsp" %> 
 
 <!DOCTYPE html>
@@ -46,6 +46,17 @@
                 width: 200px; 
                 margin-bottom: 10px; 
             }
+            .response-container{
+                background-color: lightsteelblue;
+            }
+             td {
+                padding: 4px;
+
+            }
+            th {
+                padding: 4px;
+                text-align: center;
+            }
         </style>
     </head>
     <body>
@@ -77,6 +88,7 @@
                  <select id="course" name="course" required>
                     <option value="" disabled selected>Select a course</option>
                     <c:forEach var="course" items="${courseList}">
+                        
                         <option value="${course.courseId}">${course.courseName}</option>
                     </c:forEach>
                 </select>
@@ -100,12 +112,70 @@
                 <br>
                 <br>
                 <input type="submit" value="Submit" class="button">
+                
+                <div class="response-container">  
+                    <h3 id="listIdHeader"></h3>  
+                    <div id="listContainer"></div>
+                </div>
+              
         </div>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script>
             window.onload = function () {
                 addRow();
             };
+            
+       $(document).ready(function() {
+            $("#generateList").submit(function(event) {
+                event.preventDefault();
+                handleFormSubmit("generatepresentationlist", "#generateList");
+            });
 
+            $("#bookingForm").submit(function(event) {
+                event.preventDefault();
+                handleFormSubmit("savepresentationlist", "#bookingForm");
+            });
+
+    function handleFormSubmit(url, formId) {
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $(formId).serialize(),
+            success: function(data) {
+                console.log(data);
+                var listId = data.listId;
+                var courseName = data.courseName;
+                var bookingDTOList = data.bookingDTOList;
+
+                $("#listIdHeader").text("List Created! \n\
+                        List ID: " + listId);
+
+                var tableHtml = "<table><thead><tr>\n\
+                        <th>Course</th>\n\
+                        <th>Type of Session</th>\n\
+                        <th>Location</th>\n\
+                        <th>Start Time</th>\n\
+                        </tr></thead><tbody>";
+                $.each(bookingDTOList, function(index, bookingDTO) {
+                    tableHtml += "<tr>\n\
+                            <td>" + courseName + "</td>\n\
+                            <td>" + bookingDTO.typeOfSession + "</td>\n\
+                            <td>" + bookingDTO.location + "</td>\n\
+                            <td>" + bookingDTO.startTime + "</td>\n\
+                            </tr>";
+                });
+                tableHtml += "</tbody></table>";
+
+                $("#listContainer").html(tableHtml);
+
+                var form = $(formId);
+                form[0].reset();
+            }
+        });
+    }
+});
+
+            
             function validateForm() { 
                 var courseId = document.getElementById("courseId").value;
 
