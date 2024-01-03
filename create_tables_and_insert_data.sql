@@ -34,7 +34,7 @@ CREATE TABLE booking(
 
 CREATE TABLE list(
     list_id INT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1),
-    users_id INT NOT NULL REFERENCES users(users_id),
+    users_id INT REFERENCES users(users_id),
 	course_id INT NOT NULL REFERENCES course(course_id)
 );
 
@@ -91,7 +91,8 @@ VALUES
 -- users -> id=3 (test) is registered in course id=1 (id1212)
 INSERT INTO users_course(users_id,course_id)
 VALUES
-(3,1);
+(3,1),
+(3,2);
 
 -- Beda creates two lists for course:id 1 (id1212)
 INSERT INTO list(users_id,course_id) 
@@ -116,13 +117,6 @@ VALUES
 (2,3),
 (2,4);
 
--- cross reference -- cross reference the added bookings with cource
---INSERT INTO booking_course(booking_id,course_id)
---VALUES
---(1,1),
---(2,1),
---(3,1),
---(4,1);
 
 -- users -> id=3 (test) is registered in booking id=1
 INSERT INTO users_booking(users_id,booking_id)
