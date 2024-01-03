@@ -110,6 +110,9 @@
                                 <tr>
                                     <td><input type="checkbox" name="userIds" value="${adminUser.userId}"></td>
                                     <td>${adminUser.username}</td>
+                                    <td>
+                                    <a href="/Patjo-booking-system/users/editUserView?userId=${adminUser.userId}">Edit</a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                         </tbody>
@@ -130,7 +133,9 @@
                                 <tr>
                                     <td><input type="checkbox" name="userIds" value="${nonAdminUser.userId}"></td>
                                     <td>${nonAdminUser.username}</td>
-                                    <!-- Add more cells if needed -->
+                                    <td>
+                                    <a href="/Patjo-booking-system/users/editUserView?userId=${nonAdminUser.userId}">Edit</a>
+                                    </td>
                                 </tr>
                             </c:forEach>
                         </tbody>

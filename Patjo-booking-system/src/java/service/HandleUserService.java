@@ -29,6 +29,10 @@ public class HandleUserService {
         handleUserRepository.saveUser(user);
         
     }
+    
+    public User getUserById(Integer userId) {
+        return handleUserRepository.fetchUserFromDB(userId);
+    }
 
     public void addNewUser(String username, String password, Boolean isAdmin, int[] courseIDs) {
         int isAdminInt = 0;
@@ -40,6 +44,19 @@ public class HandleUserService {
         int userId = handleUserRepository.fetchUserID(newUser);
         for(int courseId : courseIDs)
             handleUserRepository.insertCourseAndUserIds(userId, courseId);
+    }
+    
+    public void updateCurrentUser(Integer userId, String username, String password, Boolean isAdmin, int[] courseIDs){
+        int isAdminInt = 0;
+        if (isAdmin) {
+            isAdminInt = 1;
+        }
+        User newUser = new User(username, password, isAdminInt);
+        newUser.setUserId(userId);
+        
+        handleUserRepository.updateUser(newUser);
+        handleUserRepository.updateUserCourses(userId, courseIDs);
+    
     }
 
     public List<User> getAllUsers() {

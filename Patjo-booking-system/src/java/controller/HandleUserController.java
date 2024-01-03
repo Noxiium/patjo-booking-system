@@ -10,6 +10,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,7 +56,6 @@ public class HandleUserController {
             @RequestParam(defaultValue = "false") boolean isAdmin,
             Model model) {
         
-        System.out.println("Selected Course Id:" + courseId);
         String[] courseIdArray  = courseId.split(",");
         int[] selectedCourseIds = Arrays.stream(courseIdArray)
                                  .mapToInt(Integer::parseInt)
@@ -178,4 +178,34 @@ public class HandleUserController {
 
         return "redirect:/users/showuserbooking";
     }
+    
+    @GetMapping("/users/editUserView")
+    public String editUser(@RequestParam("userId") Integer userId, Model model){
+        User user = handleUserService.getUserById(userId);
+        model.addAttribute("user", user);
+        
+        List<CourseDTO> thisUsersCurrentCourses = user.getCourseIds();
+        model.addAttribute("usersCourseList", thisUsersCurrentCourses);
+        
+        List<CourseDTO> courseList = handleUserService.fetchAvailableCourses();
+        model.addAttribute("courseList", courseList);
+        return "editUserView";
+    }
+    
+    @PostMapping("/users/editUser")
+    public String editUser(@RequestParam String username,
+            @RequestParam String password,
+            @RequestParam String courseId,
+            @RequestParam Integer userId,
+            @RequestParam(defaultValue = "false") boolean isAdmin,
+            Model model){
+        
+        String[] courseIdArray  = courseId.split(",");
+        int[] selectedCourseIds = Arrays.stream(courseIdArray)
+                                 .mapToInt(Integer::parseInt)
+                                 .toArray();
+        
+        handleUserService.updateCurrentUser(userId, username, password, isAdmin, selectedCourseIds);
+        return "redirect:/users/showusers";
+    }    
 }

@@ -9,7 +9,7 @@ public class CourseDTO implements Serializable {
 
     private int courseId;
 
-    private String courseName;
+    public String courseName;
 
     public CourseDTO() {
 

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +16,7 @@ public class User {
     private String password;
     private int isAdmin;
     private String[] courseIds;
+    private List<CourseDTO> courses;
 
     public User(){
         
@@ -25,11 +27,11 @@ public class User {
         this.isAdmin = isAdmin;
     }
     
-    public User(String username, String password, int isAdmin, String[] courseIds) {
+    public User(String username, String password, int isAdmin, List<CourseDTO> courses) {
         this.username = username;
         this.password = password;
         this.isAdmin = isAdmin;
-        this.courseIds = courseIds;
+        this.courses = courses;
     }
 
     public Integer getUserId() {
@@ -64,8 +66,12 @@ public class User {
         this.isAdmin = isAdmin;
     }
     
-    public String[] getCourseIds(){
-        return courseIds;
+    public List<CourseDTO> getCourseIds(){
+        return courses;
+    }
+    
+    public void setCoursesList(List<CourseDTO> courses){
+            this.courses = courses;
     }
     
     @Override

@@ -30,6 +30,19 @@ public class HandleUserRepository {
         String query = "SELECT USERS_ID FROM PATJODB.USERS WHERE USERSNAME = ? AND PASSWORD = ?";
         return jdbcTemplate.queryForObject(query, Integer.class, user.getUsername(), user.getPassword());
     }
+    
+    public User fetchUserFromDB(Integer userID){
+            String sql = "SELECT * FROM PATJODB.USERS WHERE USERS_ID = ?";
+        return jdbcTemplate.queryForObject(sql, new Object[]{userID}, (rs, rowNum) -> {
+                User user = new User();
+                user.setUserId(rs.getInt("users_id"));
+                user.setUsername(rs.getString("usersname"));
+                user.setPassword(rs.getString("password"));
+                user.setIsAdmin(rs.getInt("admin"));
+                user.setCoursesList(fetchUsersCoursesFromDB(userID));
+                return user;
+            });
+    }
 
     public List<User> fetchAllUsersFromDB() {
         String sql = "SELECT * FROM PATJODB.USERS";
@@ -176,7 +189,27 @@ public class HandleUserRepository {
     public void insertCourseAndUserIds(Integer userId, Integer courseId) {
         String query = "INSERT INTO PATJODB.USERS_COURSE(USERS_ID,COURSE_ID)VALUES(?, ?)";
         jdbcTemplate.update(query, userId, courseId);
-
     }
+    
+    public List<CourseDTO> fetchUsersCoursesFromDB(Integer userId) {
+        String query = "SELECT C.COURSE_ID, C.COURSE_NAME FROM PATJODB.COURSE C JOIN PATJODB.USERS_COURSE UC ON C.COURSE_ID = UC.COURSE_ID WHERE UC.USERS_ID = ?";
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(CourseDTO.class), userId);
+    }
+    
+    public void updateUser(User user) {
+        String sql = "UPDATE PATJODB.USERS SET USERSNAME = ?, PASSWORD = ?, ADMIN = ? WHERE USERS_ID = ?";
+        jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getIsAdmin(), user.getUserId());
+    }
+    
+    public void updateUserCourses(Integer userId, int[] courseIds) {
+        
+        String deleteQuery = "DELETE FROM PATJODB.USERS_COURSE WHERE USERS_ID = ?";
+        jdbcTemplate.update(deleteQuery, userId);
 
+        
+        String insertQuery = "INSERT INTO PATJODB.USERS_COURSE(USERS_ID, COURSE_ID) VALUES (?, ?)";
+        for (Integer courseId : courseIds) {
+            jdbcTemplate.update(insertQuery, userId, courseId);
+    }
+}
 }
