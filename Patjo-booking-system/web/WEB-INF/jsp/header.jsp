@@ -4,6 +4,11 @@
 --%>
 
 <%@ page language="java" contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    if(session.getAttribute("userId") == null) {
+        response.sendRedirect("/Patjo-booking-system");
+    }
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -38,6 +43,11 @@
         </style>
              <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
         <script>
+            
+               if(${sessionScope.userId} === null){
+                   window.location.href = "/Patjo-booking-system/loginView";
+               }
+            
                var socket = new WebSocket("ws://localhost:8080/Patjo-booking-system/endpoint");
                 
                 
