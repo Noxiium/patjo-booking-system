@@ -3,7 +3,6 @@ package repository;
 import java.util.List;
 import model.BookingDTO;
 import model.CourseDTO;
-import model.PresentationListDTO;
 import model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -89,6 +88,9 @@ public class HandleUserRepository {
      * @param userId ID of the user to be removed.
      */
     public void removeUserFromDB(Integer userId) {
+        String updateQuery = "UPDATE PATJODB.LIST SET USERS_ID = NULL WHERE USERS_ID = ?";
+        jdbcTemplate.update(updateQuery,userId);
+        
         String query = "DELETE FROM PATJODB.USERS WHERE USERS_ID = ?";
         jdbcTemplate.update(query, userId);
     }
