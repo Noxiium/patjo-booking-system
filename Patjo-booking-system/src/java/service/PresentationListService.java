@@ -39,7 +39,18 @@ public class PresentationListService {
      * presentation lists.
      */
     public List<PresentationListDTO> fetchAllPresentationLists() {
-        return presentationListRepository.fetchAllPresentationListsFromDB();
+        
+        List<PresentationListDTO> presentationList = presentationListRepository.fetchAllPresentationListsFromDB();
+    
+        for(PresentationListDTO list : presentationList){
+        if(list.getCreatorName() != null){
+        String userName = presentationListRepository.fetchCreatorNameFromUserId(list.getCreatorName());
+        list.setCreatorName(userName);
+        } else{
+        list.setCreatorName("not active");
+        }
+        }
+    return presentationList;
     }
 
     /**

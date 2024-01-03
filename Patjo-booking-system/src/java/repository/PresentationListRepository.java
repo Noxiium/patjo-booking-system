@@ -30,16 +30,15 @@ public class PresentationListRepository {
      * lists.
      */
     public List<PresentationListDTO> fetchAllPresentationListsFromDB() {
-        String query = "SELECT L.LIST_ID, U.USERSNAME, C.COURSE_NAME "
+        String query = "SELECT L.LIST_ID, L.USERS_ID, C.COURSE_NAME "
                 + "FROM PATJODB.LIST AS L "
-                + "JOIN PATJODB.USERS AS U ON L.USERS_ID = U.USERS_ID "
-                + "JOIN PATJODB.COURSE AS C ON L.COURSE_ID = C.COURSE_ID";
+                + "JOIN PATJODB.COURSE AS C ON L.COURSE_ID = C.COURSE_ID ORDER BY L.LIST_ID";
 
         return jdbcTemplate.query(query, (rs, rowNum)
                 -> new PresentationListDTO(
                         rs.getInt("LIST_ID"),
                         rs.getString("COURSE_NAME"),
-                        rs.getString("USERSNAME")
+                        rs.getString("USERS_ID")
                 )
         );
     }
@@ -161,5 +160,11 @@ public class PresentationListRepository {
     public String getCourseNameFromId(String courseId) {
        String query = "SELECT COURSE_NAME FROM PATJODB.COURSE WHERE COURSE_ID = ?";
        return jdbcTemplate.queryForObject(query, String.class, courseId);
+    }
+
+    public String fetchCreatorNameFromUserId(String creatorName) {
+       String query = "SELECT USERSNAME FROM PATJODB.USERS WHERE USERS_ID = ?";
+       return jdbcTemplate.queryForObject(query,String.class,creatorName);
+       
     }
 }
