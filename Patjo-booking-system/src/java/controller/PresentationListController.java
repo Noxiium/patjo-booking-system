@@ -3,6 +3,7 @@ package controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpSession;
 import model.BookingDTO;
 import model.CourseDTO;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import service.PresentationListService;
 
@@ -92,14 +94,15 @@ public class PresentationListController {
      * @return
      */
     @RequestMapping("/presentationlist/savepresentationlist")
-    public String savePresentationList(@RequestParam("typeOfSession") List<String> typeOfSession,
+    @ResponseBody
+    public Map<String, Object> savePresentationList(@RequestParam("typeOfSession") List<String> typeOfSession,
             @RequestParam("location") List<String> location,
             @RequestParam("startTime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") List<Date> startTime,
             @RequestParam("courseId") String courseId,
             HttpSession session) {
 
-        presentationListService.saveCreatedPresentationList(typeOfSession, location, startTime, session, Integer.valueOf(courseId));
-        return "redirect:/adminmain";
+        Map<String, Object> result = presentationListService.saveCreatedPresentationList(typeOfSession, location, startTime, session, courseId);
+        return result;
     }
 
     /**
@@ -113,19 +116,22 @@ public class PresentationListController {
      * minutes.
      * @param courseId The ID of the course
      * @param session The HttpSession containing user-related information.
+     * @param model
      * @return 
      */
     @RequestMapping("/presentationlist/generatepresentationlist")
-    public String saveGeneratedPresentationList(@RequestParam("typeOfSession") String typeOfSession,
+    @ResponseBody
+    public Map<String, Object> saveGeneratedPresentationList(@RequestParam("typeOfSession") String typeOfSession,
             @RequestParam("location") String location,
             @RequestParam("startTime") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm") Date startTime,
             @RequestParam("numberOfTimeSlots") int numberOfTimeSlots,
             @RequestParam("intervalBetweenTimeSlots") int intervalBetweenTimeSlots,
             @RequestParam("course") String courseId,
-            HttpSession session) {
+            HttpSession session, Model model) {
 
-        presentationListService.saveGeneratedPresentationList(typeOfSession, location, startTime, numberOfTimeSlots, intervalBetweenTimeSlots, courseId, session);
-        return "redirect:/adminmain";
+        Map<String, Object> result = presentationListService.saveGeneratedPresentationList(typeOfSession, location, startTime, numberOfTimeSlots, intervalBetweenTimeSlots, courseId, session);
+        
+        return result;
     }
 
 }

@@ -5,7 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpSession;
 import model.BookingDTO;
 import model.CourseDTO;
@@ -37,7 +39,18 @@ public class PresentationListService {
      * presentation lists.
      */
     public List<PresentationListDTO> fetchAllPresentationLists() {
-        return presentationListRepository.fetchAllPresentationListsFromDB();
+        
+        List<PresentationListDTO> presentationList = presentationListRepository.fetchAllPresentationListsFromDB();
+    
+        for(PresentationListDTO list : presentationList){
+        if(list.getCreatorName() != null){
+        String userName = presentationListRepository.fetchCreatorNameFromUserId(list.getCreatorName());
+        list.setCreatorName(userName);
+        } else{
+        list.setCreatorName("not active");
+        }
+        }
+    return presentationList;
     }
 
     /**
@@ -86,8 +99,10 @@ public class PresentationListService {
      * @param session HttpSession object containing user-related information.
      * @param courseId Integer representing the ID of the course for which the
      * presentation list is created.
+     * @return 
      */
-    public void saveCreatedPresentationList(List<String> typeOfSession, List<String> location, List<Date> startTime, HttpSession session, Integer courseId) {
+   
+    public Map<String, Object> saveCreatedPresentationList(List<String> typeOfSession, List<String> location, List<Date> startTime, HttpSession session, String courseId) {
 
         // Get the ID of the user creating the list
         Integer userId = (Integer) session.getAttribute("userId");
@@ -96,16 +111,27 @@ public class PresentationListService {
         List<BookingDTO> bookingDTOList = buildBookingDTOList(typeOfSession, location, startTime);
 
         // Insert the presentation list and its creator into the database, returning the generated list ID
-        int listId = presentationListRepository.saveListInDBReturnListId(userId, courseId);
+        int listId = presentationListRepository.saveListInDBReturnListId(userId, Integer.valueOf(courseId));
 
         // Save the associated bookings in the database, returning the generated booking IDs
         List<Integer> bookingIds = saveAssociatedBookings(bookingDTOList);
 
         // Update the cross-reference table between the presentation list and bookings
         presentationListRepository.updateBookingListReferenceTable(listId, bookingIds);
+        
+        //Get course name from course ID
+        String courseName = presentationListRepository.getCourseNameFromId(courseId);
 
         // Send a message to all connected WebSocket clients to notify them of an update.
         WebSocketEndpoint.sendMessageToAll("updateBooking");
+        
+        
+        Map<String, Object> result = new HashMap<>();
+        result.put("listId",listId);
+        result.put("bookingDTOList",bookingDTOList);
+        result.put("courseName", courseName);
+        
+        return result;
     }
 
     /**
@@ -116,6 +142,7 @@ public class PresentationListService {
      * be saved.
      * @return List of Integer representing the generated booking IDs.
      */
+
     private List<Integer> saveAssociatedBookings(List<BookingDTO> bookingDTOList) {
         List<Integer> bookingIds = new ArrayList<>();
 
@@ -139,8 +166,9 @@ public class PresentationListService {
      * @param courseId The ID of the course
      * @param session The HttpSession containing information about the current
      * user.
+     * @return 
      */
-    public void saveGeneratedPresentationList(String typeOfSession, String location,
+    public Map<String, Object> saveGeneratedPresentationList(String typeOfSession, String location,
             Date startTime, int numberOfTimeSlots, int intervalBetweenTimeSlots,
             String courseId, HttpSession session) {
 
@@ -164,6 +192,15 @@ public class PresentationListService {
 
         // Send a message to all connected WebSocket clients to notify them of an update.
         WebSocketEndpoint.sendMessageToAll("updateBooking");
+        
+        String courseName = presentationListRepository.getCourseNameFromId(courseId);
+        Map<String, Object> result = new HashMap<>();
+        System.out.println("coursename" + courseName);
+        result.put("listId",listId);
+        result.put("bookingDTOList",bookingDTOList);
+        result.put("courseName", courseName);
+        
+        return result;
     }
 
     /**
