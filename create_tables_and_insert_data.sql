@@ -38,13 +38,6 @@ CREATE TABLE list(
 	course_id INT NOT NULL REFERENCES course(course_id)
 );
 
---CREATE TABLE booking_course (
---  booking_id  INT NOT NULL REFERENCES booking(booking_id),
---  course_id INT NOT NULL REFERENCES course(course_id)
---);
-
---ALTER TABLE booking_course ADD CONSTRAINT PK_booking_course PRIMARY KEY (booking_id,course_id);
-
 CREATE TABLE users_booking (
     users_id  INT NOT NULL REFERENCES users(users_id) ON DELETE CASCADE,
     booking_id INT NOT NULL REFERENCES booking(booking_id) ON DELETE CASCADE
