@@ -187,6 +187,10 @@ public class HandleUserRepository {
         jdbcTemplate.update(query, timeSlotId);
     }
 
+    public List<CourseDTO> fetchAvailableCoursesFromDB(){
+        String query = "SELECT COURSE_ID,COURSE_NAME FROM PATJODB.COURSE";
+        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(CourseDTO.class));
+    }
     /**
      * Inserts the given user and course IDs into the USERS_COURSE table.
      *
