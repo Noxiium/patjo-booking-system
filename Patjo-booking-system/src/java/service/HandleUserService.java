@@ -3,7 +3,6 @@ package service;
 import controller.WebSocketEndpoint;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpSession;
 import model.BookingDTO;
 import model.CourseDTO;
 import model.User;

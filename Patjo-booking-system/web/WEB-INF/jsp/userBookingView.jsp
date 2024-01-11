@@ -94,7 +94,7 @@
                                 <tr>
                                     <td>
                                         <label>
-                                            <input type="radio" name="selectedTimeSlot" value="${booking.id}">
+                                            <input type="radio" name="selectedTimeSlotToDelete" value="${booking.id}">
                                         </label>
                                     <td> 
                                         ${booking.typeOfSession}
@@ -126,7 +126,7 @@
                 <br>
                 </c:if>
                  <c:if test="${not empty bookingList}">
-                <form action="assigntimeslot" method="post" onsubmit="return validateForm()">
+                <form action="assigntimeslot" method="post" onsubmit="return validateNewTimeSlotForm()">
                     <input type="hidden" name="userId" value="${userId}" />
                     <input type="hidden" name="userName" value="${userName}" />
                     <table border="1">
@@ -178,6 +178,16 @@
         </body>
     <script>
         function validateForm() {
+            var selectedTimeSlot = document.querySelector('input[name="selectedTimeSlotToDelete"]:checked');
+
+            if (!selectedTimeSlot) {
+                alert('Please select a time slot!');
+                return false; // Prevent form submission if no course is selected
+            }
+
+            return true; // Proceed with form submission
+        }
+           function validateNewTimeSlotForm() {
             var selectedTimeSlot = document.querySelector('input[name="selectedTimeSlot"]:checked');
 
             if (!selectedTimeSlot) {
