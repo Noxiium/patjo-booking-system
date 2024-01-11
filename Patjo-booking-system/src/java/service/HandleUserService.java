@@ -52,6 +52,7 @@ public class HandleUserService {
         int userId = handleUserRepository.fetchUserID(newUser);
         for(int courseId : courseIDs)
             handleUserRepository.insertCourseAndUserIds(userId, courseId);
+        WebSocketEndpoint.sendMessageToAll("updateBooking");
     }
     
     /**
