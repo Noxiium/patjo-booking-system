@@ -225,7 +225,7 @@ public class HandleUserController {
                                  .mapToInt(Integer::parseInt)
                                  .toArray();
         
-        handleUserService.updateCurrentUser(userId, username, password, isAdmin, selectedCourseIds);
+        handleUserService.updateSelectedUser(userId, username, password, isAdmin, selectedCourseIds);
         return "redirect:/users/showusers";
     }    
 }
