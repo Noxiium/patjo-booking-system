@@ -4,7 +4,7 @@
 <%@ include file="sidebar.jsp" %>
 <%
     String userRole = (String)session.getAttribute("role");
-    if(!userRole.equals("Admin")) {
+    if((userRole == null) || !userRole.equals("Admin")) {
         response.sendRedirect("/Patjo-booking-system/main");
     }
 %>

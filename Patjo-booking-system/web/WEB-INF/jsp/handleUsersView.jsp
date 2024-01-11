@@ -9,7 +9,7 @@
 
 <%
     String userRole = (String)session.getAttribute("role");
-    if(!userRole.equals("Admin")) {
+    if(!userRole.equals("Admin") || (userRole == null)) {
         response.sendRedirect("/Patjo-booking-system/main");
     }
 %>
