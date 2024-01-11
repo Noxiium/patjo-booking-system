@@ -34,6 +34,14 @@ public class HandleUserService {
         return handleUserRepository.fetchUserFromDB(userId);
     }
 
+    /**
+     * Adds a new user to the database.
+     *
+     * @param  username    the username of the new user
+     * @param  password    the password of the new user
+     * @param  isAdmin     true if the new user is an admin, false otherwise
+     * @param  courseIDs   an array of course IDs that the new user is enrolled in
+     */
     public void addNewUser(String username, String password, Boolean isAdmin, int[] courseIDs) {
         int isAdminInt = 0;
         if (isAdmin) {
@@ -46,7 +54,16 @@ public class HandleUserService {
             handleUserRepository.insertCourseAndUserIds(userId, courseId);
     }
     
-    public void updateCurrentUser(Integer userId, String username, String password, Boolean isAdmin, int[] courseIDs){
+    /**
+     * Updates the selected user with the given information.
+     *
+     * @param  userId      the ID of the user
+     * @param  username    the new username for the user
+     * @param  password    the new password for the user
+     * @param  isAdmin     a boolean indicating whether the user is an admin or not
+     * @param  courseIDs   an array of course IDs that the user is enrolled in
+     */
+    public void updateSelectedUser(Integer userId, String username, String password, Boolean isAdmin, int[] courseIDs){
         int isAdminInt = 0;
         if (isAdmin) {
             isAdminInt = 1;
@@ -59,10 +76,21 @@ public class HandleUserService {
     
     }
 
+    /**
+     * Retrieves all users from the database.
+     *
+     * @return  a list of User objects representing all users
+     */
     public List<User> getAllUsers() {
         return handleUserRepository.fetchAllUsersFromDB();
     }
 
+    /**
+     * Retrieves a list of all admin users from an existing list of users.
+     *
+     * @param  allUsers  the list of users to search through
+     * @return           the list of admin users found
+     */
     public List<User> getAllAdminUsersFromExistingList(List<User> allUsers) {
         List<User> adminUsers = new ArrayList<>();
         for (User user : allUsers) {
@@ -73,6 +101,12 @@ public class HandleUserService {
         return adminUsers;
     }
 
+    /**
+     * Retrieves a list of non-admin users from the provided list of users.
+     *
+     * @param  allUsers  the list of users to filter
+     * @return           a list containing only the non-admin users
+     */
     public List<User> getAllNonAdminUsersFromExistingList(List<User> allUsers) {
         List<User> nonAdminUsers = new ArrayList<>();
         for (User user : allUsers) {
@@ -184,6 +218,11 @@ public class HandleUserService {
          WebSocketEndpoint.sendMessageToAll("updateBooking");
     }
     
+     /**
+      * Fetches the available courses.
+      *
+      * @return  the list of available courses
+      */
      public List<CourseDTO> fetchAvailableCourses() {
         List<CourseDTO> availableCourses = handleUserRepository.fetchAvailableCoursesFromDB();
         return availableCourses;

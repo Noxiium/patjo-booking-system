@@ -17,10 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import service.HandleUserService;
 
-/**
- *
- * @author PC
- */
 @Controller
 public class HandleUserController {
 
@@ -30,7 +26,7 @@ public class HandleUserController {
     /**
      * Retrieves all users from the database and adds them to the model.
      *
-     * @param model the model to add the user list to
+     * @param model the Spring Model to add attributes for the view
      * @return the name of the view to handle the users
      */
     @GetMapping
@@ -40,14 +36,23 @@ public class HandleUserController {
         List<User> admins = handleUserService.getAllAdminUsersFromExistingList(users);
         List<User> nonAdmins = handleUserService.getAllNonAdminUsersFromExistingList(users);
         model.addAttribute("adminList", admins);
-        model.addAttribute("nonAdminList", nonAdmins);// Fetch all users from the database
+        model.addAttribute("nonAdminList", nonAdmins);
         
         List<CourseDTO> courseList = handleUserService.fetchAvailableCourses();
         model.addAttribute("courseList", courseList);
         return "handleUsersView";
     }
 
-    // Endpoint to add user
+    /**
+     * Processes the request to add new user to the database.
+     *
+     * @param  username    the username of the new user
+     * @param  password    the password of the new user
+     * @param  courseId    the course ID of the new user
+     * @param  isAdmin     a flag indicating if the new user is an admin (default is false)
+     * @param  model       the Spring Model to add attributes for the view
+     * @return             the view name for redirecting after adding the user
+     */
     @PostMapping
     @RequestMapping("/users/addUser")
     public String addUser(@RequestParam String username,
@@ -79,7 +84,7 @@ public class HandleUserController {
      * bookings.
      *
      * @param userIds String of user IDs to be removed.
-     * @param model The model for adding attributes.
+     * @param model The Spring Model to add attributes for the view
      * @param redirectAttributes Used to flash attributes for the redirect.
      * @return Redirects to the handleUsersView after removing users.
      */
@@ -88,8 +93,7 @@ public class HandleUserController {
     public String removeUsers(@RequestParam("userIds") String userIds, Model model, RedirectAttributes redirectAttributes) {
         System.out.println("removeUsers - POST");
         String[] selectedUserIds = userIds.split(",");
-     
-
+    
         handleUserService.removeUserAndAssociatedBookings(selectedUserIds);
         redirectAttributes.addFlashAttribute("deleteduser", "deleteduser");
         return "redirect:/users/showusers";
@@ -132,7 +136,6 @@ public class HandleUserController {
         model.addAttribute("userId", userId);
 
         return "userBookingView";
-
     }
 
     /**
@@ -154,7 +157,6 @@ public class HandleUserController {
         model.addAttribute("username", userName);
         model.addAttribute("userId", userId);
         return "redirect:/users/showuserbooking";
-
     }
 
     /**
@@ -179,6 +181,13 @@ public class HandleUserController {
         return "redirect:/users/showuserbooking";
     }
     
+    /**
+     * Retrieves the user with the given userId and displays the editUserView.
+     *
+     * @param  userId  the ID of the user to be edited
+     * @param  model   The Spring Model to add attributes for the view
+     * @return         the name of the view to be displayed
+     */
     @GetMapping("/users/editUserView")
     public String editUser(@RequestParam("userId") Integer userId, Model model){
         User user = handleUserService.getUserById(userId);
@@ -192,6 +201,17 @@ public class HandleUserController {
         return "editUserView";
     }
     
+    /**
+     * Processes the request to edit a user.
+     *
+     * @param  username  the username of the user
+     * @param  password  the password of the user
+     * @param  courseId  the course ID of the user (comma-separated if multiple)
+     * @param  userId    the ID of the user
+     * @param  isAdmin   a flag indicating if the user is an admin (default is false)
+     * @param  model     the Spring Model to add attributes for the view
+     * @return           a string representing the redirection URL
+     */
     @PostMapping("/users/editUser")
     public String editUser(@RequestParam String username,
             @RequestParam String password,
@@ -205,7 +225,7 @@ public class HandleUserController {
                                  .mapToInt(Integer::parseInt)
                                  .toArray();
         
-        handleUserService.updateCurrentUser(userId, username, password, isAdmin, selectedCourseIds);
+        handleUserService.updateSelectedUser(userId, username, password, isAdmin, selectedCourseIds);
         return "redirect:/users/showusers";
     }    
 }

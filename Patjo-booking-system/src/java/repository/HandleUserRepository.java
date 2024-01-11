@@ -43,6 +43,11 @@ public class HandleUserRepository {
             });
     }
 
+    /**
+     * Fetches all users from the database.
+     *
+     * @return The list of User objects representing all the users in the database.
+     */
     public List<User> fetchAllUsersFromDB() {
         String sql = "SELECT * FROM PATJODB.USERS";
 
@@ -182,27 +187,44 @@ public class HandleUserRepository {
         jdbcTemplate.update(query, timeSlotId);
     }
 
-    public List<CourseDTO> fetchAvailableCoursesFromDB() {
-        String query = "SELECT COURSE_ID,COURSE_NAME FROM PATJODB.COURSE";
-        return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(CourseDTO.class));
-
-    }
-    
+    /**
+     * Inserts the given user and course IDs into the USERS_COURSE table.
+     *
+     * @param  userId    the ID of the user
+     * @param  courseId  the ID of the course
+     */
     public void insertCourseAndUserIds(Integer userId, Integer courseId) {
         String query = "INSERT INTO PATJODB.USERS_COURSE(USERS_ID,COURSE_ID)VALUES(?, ?)";
         jdbcTemplate.update(query, userId, courseId);
     }
     
+    /**
+     * Fetches the courses of a user from the database.
+     *
+     * @param  userId  the ID of the user
+     * @return         a list of CourseDTO objects representing the courses of the user
+     */
     public List<CourseDTO> fetchUsersCoursesFromDB(Integer userId) {
         String query = "SELECT C.COURSE_ID, C.COURSE_NAME FROM PATJODB.COURSE C JOIN PATJODB.USERS_COURSE UC ON C.COURSE_ID = UC.COURSE_ID WHERE UC.USERS_ID = ?";
         return jdbcTemplate.query(query, new BeanPropertyRowMapper<>(CourseDTO.class), userId);
     }
     
+    /**
+     * Updates a user in the database with the provided information.
+     *
+     * @param  user  the user object containing the updated information
+     */
     public void updateUser(User user) {
         String sql = "UPDATE PATJODB.USERS SET USERSNAME = ?, PASSWORD = ?, ADMIN = ? WHERE USERS_ID = ?";
         jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getIsAdmin(), user.getUserId());
     }
     
+    /**
+     * Updates the courses for a user.
+     *
+     * @param  userId     the ID of the user
+     * @param  courseIds  an array of course IDs to update
+     */
     public void updateUserCourses(Integer userId, int[] courseIds) {
         
         String deleteQuery = "DELETE FROM PATJODB.USERS_COURSE WHERE USERS_ID = ?";
