@@ -50,7 +50,20 @@
 
         <div class="main">
             <h1>Student page</h1>
- 
+             <c:if test="${not empty confirmation}">
+                <div class="confirmation-container">
+                    <p>Confirmed: Your reserved time slot has been confirmed.</p>
+                    <p>View all your booked time slots under "My Bookings".</p>
+                </div>
+                <br>
+            </c:if>
+            <c:if test="${not empty deletedtimeslot}">
+                <div class="deleted-container">
+                    <p>Booking Canceled: Your reserved time slot has been canceled.</p>
+                    <p>View all your booked time slots under "My Bookings".</p>
+                </div>
+                <br>
+            </c:if>
             <div class="list-section">
                 <div class="list-title">My Bookings:</div>
                 <div class="list-item">- View your booked time slots for a course.</div>
