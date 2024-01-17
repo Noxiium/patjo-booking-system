@@ -150,7 +150,7 @@ public class HandleUserController {
     @RequestMapping("/users/deletetimeslot")
     public String deleteUserTimeSlot(@RequestParam("userId") Integer userId,
             @RequestParam("userName") String userName,
-            @RequestParam("selectedTimeSlot") Integer timeSlotId, Model model) {
+            @RequestParam("selectedTimeSlotToDelete") Integer timeSlotId, Model model) {
 
         handleUserService.deleteUserBooking(userId, timeSlotId);
 
